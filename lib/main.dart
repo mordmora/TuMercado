@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tu_mercado/config/route_managment.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
+import 'package:tu_mercado/providers/product_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: MediaQuery(
         data: MediaQuery.of(context)

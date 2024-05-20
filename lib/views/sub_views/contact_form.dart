@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tu_mercado/components/text_field.dart';
 import 'package:tu_mercado/config/styles.dart';
 
