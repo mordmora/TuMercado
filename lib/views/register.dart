@@ -145,7 +145,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
           child: PersonalForm(
             
             onTap: () {
-              print("$_email $_password $_name $_lastName $_date ");
+              
             },
             nameController: _nameController,
             lastNameController: _lastNameController,

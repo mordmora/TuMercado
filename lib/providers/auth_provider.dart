@@ -42,8 +42,6 @@ class AuthProvider extends ChangeNotifier {
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(data));
       if (response.statusCode == 200) {
-        print(response.body.toString());
-
         return "output is null";
       } else {
         String messageBody = jsonDecode(response.body)["message"];

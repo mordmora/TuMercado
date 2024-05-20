@@ -4,8 +4,8 @@ class Product {
   final String description;
   final double price;
   final int stock;
-  final DateTime createAt;
-  final DateTime updateAt;
+  final String createAt;
+  final String updateAt;
 
   Product({
     required this.id,
@@ -24,8 +24,8 @@ class Product {
       description: json['description'],
       price: json['price'],
       stock: json['stock'],
-      createAt: DateTime.parse(json['createAt']),
-      updateAt: DateTime.parse(json['updateAt']),
+      createAt: json['createAt'],
+      updateAt: json['updateAt'],
     );
   }
 
@@ -36,9 +36,8 @@ class Product {
       'description': description,
       'price': price,
       'stock': stock,
-      'createAt': createAt.toIso8601String(),
-      'updateAt': updateAt.toIso8601String(),
+      'createAt': createAt,
+      'updateAt': updateAt,
     };
   }
 }
-

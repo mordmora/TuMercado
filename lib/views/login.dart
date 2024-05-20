@@ -138,26 +138,26 @@ class _LoginState extends State<Login> {
                         onTap: () {
                           Navigator.pushNamedAndRemoveUntil(
                               context, '/home', (route) => false);
-                          //authProvider
-                          //    .login(_email, _password)
-                          //    .then((value) => {
-                          //          if (value.contains("incorrectos"))
-                          //            {
-                          //              ScaffoldMessenger.of(context)
-                          //                  .showSnackBar(SnackBar(
-                          //                content: Text(
-                          //                  value,
-                          //                  style: TextStyles.normal,
-                          //               ),
-                          //              backgroundColor: Colors.black,
-                          //            ))
-                          //           }
-                          //           else
-                          //           {
-                          //             Navigator.pushNamedAndRemoveUntil(
-                          //                 context, "/home", (route) => false)
-                          //           }
-                          //       });
+                          authProvider
+                              .login(_email, _password)
+                              .then((value) => {
+                                    if (value.contains("incorrectos"))
+                                      {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                            value,
+                                            style: TextStyles.normal,
+                                         ),
+                                        backgroundColor: Colors.black,
+                                      ))
+                                     }
+                                     else
+                                     {
+                                       Navigator.pushNamedAndRemoveUntil(
+                                           context, "/home", (route) => false)
+                                     }
+                                 });
                         },
                         color: Colors.black,
                         labelColor: Colors.white,
