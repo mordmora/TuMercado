@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
-import 'package:tu_mercado/views/cart_page.dart';
+import 'package:tu_mercado/views/home/cart_page.dart';
 import 'package:tu_mercado/views/profile_page.dart';
 
 import 'home_widget.dart';

@@ -26,4 +26,17 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     color: Colors.red,
   );
+  static const TextStyle productTitle = TextStyle(
+    fontSize: 18,
+    fontFamily: 'Outfit',
+    letterSpacing: .2,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const TextStyle productPrice = TextStyle(
+    fontSize: 16,
+    fontFamily: 'Outfit',
+    letterSpacing: .2,
+    fontWeight: FontWeight.w400,
+  );
 }

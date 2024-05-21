@@ -22,7 +22,7 @@ class ProductProvider extends ChangeNotifier {
           await http.get(Uri.parse('$_baseUrl/user/getProducts'), headers: {
         'Content-Type': 'application/json',
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1YzdkM2U0LTI3YTUtNGUxZC1hZDIzLTUzMmM3NGFlYmVhZiIsImV4cCI6MTcxNjE4MjU4OX0.j9CpUpva6rWeAvPzV65CdOEpWDH9XBN5t-292Y2xRt0'
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1YzdkM2U0LTI3YTUtNGUxZC1hZDIzLTUzMmM3NGFlYmVhZiIsImV4cCI6MTcxNjI1NzgyOH0.RmNkdfcWj0XNcjzbh-N8s3jLiwgNjXwiJTOSlw0ElB4'
       });
 
       if (response.statusCode == 200) {
@@ -33,9 +33,11 @@ class ProductProvider extends ChangeNotifier {
         _products = productResponse.products;
 
         return _products;
+      } else if (response.statusCode == 401) {
+        throw Exception(
+            'Parece que tu token ha expirado, por favor vuelve a iniciar sesión');
       } else {
-        print('Request failed with status: ${response.statusCode}.');
-        throw Exception('Failed to fetch products');
+        throw Exception('Error al cargar los productos');
       }
     } catch (error) {
       print('Error fetching products: $error');

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/views/entrypoint.dart';
-import 'package:tu_mercado/views/home_screen.dart';
+import 'package:tu_mercado/views/home/home_screen.dart';
 import 'package:tu_mercado/views/login.dart';
 import 'package:tu_mercado/views/recovery.dart';
 import 'package:tu_mercado/views/recovery_code.dart';
