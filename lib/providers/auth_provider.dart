@@ -6,17 +6,26 @@ import 'package:tu_mercado/models/User.dart';
 class AuthProvider extends ChangeNotifier {
   bool isAuthenticated = false;
   final Uri baseUrl = Uri.parse("http://commixer.pythonanywhere.com/");
+  bool _rememberMe = false;
+
+  get remembermeValue => _rememberMe;
+  set remembermeValue(value) {
+    _rememberMe = value;
+    notifyListeners();
+  }
 
   Future<String> login(String email, String password) async {
     try {
       Map<String, String> data = {"email": email, "password": password};
+      String token = "";
       final Uri url = Uri.parse("${baseUrl}user/login");
       final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(data));
       if (response.statusCode == 200) {
         notifyListeners();
-        return response.body;
+        token = jsonDecode(response.body)["token"];
+        return token;
       } else {
         String messageBody = jsonDecode(response.body)["message"];
         return messageBody;

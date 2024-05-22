@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/models/product_response.dart';
 import 'package:tu_mercado/models/products.dart';
 
@@ -14,6 +15,8 @@ class ProductProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   Future<List<Product>> fetchProducts() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
     _isLoading = true;
     notifyListeners();
 
@@ -21,8 +24,7 @@ class ProductProvider extends ChangeNotifier {
       final response =
           await http.get(Uri.parse('$_baseUrl/user/getProducts'), headers: {
         'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1YzdkM2U0LTI3YTUtNGUxZC1hZDIzLTUzMmM3NGFlYmVhZiIsImV4cCI6MTcxNjI1NzgyOH0.RmNkdfcWj0XNcjzbh-N8s3jLiwgNjXwiJTOSlw0ElB4'
+        'Authorization': 'Bearer $token',
       });
 
       if (response.statusCode == 200) {

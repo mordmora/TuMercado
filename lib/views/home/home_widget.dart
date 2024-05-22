@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/models/products.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
+import 'package:tu_mercado/views/product_details.dart';
 
 import '../../components/product_card.dart';
 
@@ -28,6 +30,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,9 +50,22 @@ class _HomeWidgetState extends State<HomeWidget> {
                       itemBuilder: (context, index) {
                         final product = products[index];
                         return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ProductCard(
-                            product: product,
+                          padding: EdgeInsets.all(8.0),
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetails(
+                                    product: product,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ProductCard(
+                              product: product,
+                            ),
                           ),
                         );
                       },

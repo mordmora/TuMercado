@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/components/button.dart';
 import 'package:tu_mercado/components/text_field.dart';
 import 'package:tu_mercado/config/colors.dart';
@@ -24,8 +25,12 @@ class _LoginState extends State<Login> {
   String _password = "";
   bool rememberMe = false;
 
+  //preferences block
+  late SharedPreferences prefs;
+
   @override
   void initState() {
+    getPreferences();
     _emailController.addListener(() {
       _email = _emailController.text;
     });
@@ -40,6 +45,13 @@ class _LoginState extends State<Login> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void getPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      rememberMe = prefs.getBool("rememberMe") ?? false;
+    });
   }
 
   @override
@@ -136,11 +148,10 @@ class _LoginState extends State<Login> {
                         width: width,
                         height: height * 0.07,
                         onTap: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/home', (route) => false);
                           authProvider
                               .login(_email, _password)
                               .then((value) => {
+                                    print(value),
                                     if (value.contains("incorrectos"))
                                       {
                                         ScaffoldMessenger.of(context)
@@ -148,16 +159,18 @@ class _LoginState extends State<Login> {
                                           content: Text(
                                             value,
                                             style: TextStyles.normal,
-                                         ),
-                                        backgroundColor: Colors.black,
-                                      ))
-                                     }
-                                     else
-                                     {
-                                       Navigator.pushNamedAndRemoveUntil(
-                                           context, "/home", (route) => false)
-                                     }
-                                 });
+                                          ),
+                                          backgroundColor: Colors.black,
+                                        ))
+                                      }
+                                    else
+                                      {
+                                        prefs.setBool("rememberMe", rememberMe),
+                                        prefs.setString("token", value),
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context, "/home", (route) => false)
+                                      }
+                                  });
                         },
                         color: Colors.black,
                         labelColor: Colors.white,
