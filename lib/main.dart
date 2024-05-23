@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tu_mercado/config/route_managment.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
+import 'package:tu_mercado/providers/user_data_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MediaQuery(
         data: MediaQuery.of(context)

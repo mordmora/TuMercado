@@ -133,6 +133,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         padding: EdgeInsets.zero,
                         onPressed: () {
                           clientOrders.add(Order(
+                            id: widget.product.id,
                             name: widget.product.name,
                             quantity: quantity.toDouble(),
                             price: _newPrice,

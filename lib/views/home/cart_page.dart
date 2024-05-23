@@ -119,7 +119,8 @@ class _CartPageState extends State<CartPage> {
                             ),
                             const Spacer(),
                             CupertinoButton(
-                                child: const Icon(Icons.delete),
+                                child: const Icon(Icons.delete,
+                                    color: Colors.black),
                                 onPressed: () {
                                   setState(() {
                                     clientOrders.removeAt(index);

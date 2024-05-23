@@ -39,4 +39,16 @@ class TextStyles {
     letterSpacing: .2,
     fontWeight: FontWeight.w400,
   );
+
+  static const TextStyle profileText = TextStyle(
+      fontSize: 18,
+      fontFamily: 'Outfit',
+      letterSpacing: .2,
+      fontWeight: FontWeight.w400);
+
+  static const TextStyle profileName = TextStyle(
+      fontSize: 18,
+      fontFamily: 'Outfit',
+      letterSpacing: .2,
+      fontWeight: FontWeight.w500);
 }
