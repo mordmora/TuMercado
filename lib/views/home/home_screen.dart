@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
-import 'package:tu_mercado/views/home/cart_page.dart';
-import 'package:tu_mercado/views/profile_page.dart';
+import 'package:tu_mercado/views/home/cart/cart_page.dart';
+import 'package:tu_mercado/views/home/profile/profile_page.dart';
 
-import 'home_widget.dart';
+import 'products/home_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,8 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PageController _pageController = PageController();
-  String _token = "";
-  late SharedPreferences _prefs;
 
   List<Widget> pages = [
     const HomeWidget(),
@@ -41,9 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void getSharedPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
     setState(() {
-      _token = _prefs.getString("token") ?? "";
     });
   }
 

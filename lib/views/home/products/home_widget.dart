@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/models/products.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
-import 'package:tu_mercado/views/product_details.dart';
+import 'package:tu_mercado/views/home/products/product_details.dart';
 
-import '../../components/product_card.dart';
+import '../../../components/product_card.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({
@@ -50,7 +50,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       itemBuilder: (context, index) {
                         final product = products[index];
                         return Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: CupertinoButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {

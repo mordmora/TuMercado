@@ -4,9 +4,9 @@ import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/User.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
-import 'package:tu_mercado/views/sub_views/contact_form.dart';
-import 'package:tu_mercado/views/sub_views/email_pass_form.dart';
-import 'package:tu_mercado/views/sub_views/personal_form.dart';
+import 'package:tu_mercado/views/register/sub_views/contact_form.dart';
+import 'package:tu_mercado/views/register/sub_views/email_pass_form.dart';
+import 'package:tu_mercado/views/register/sub_views/personal_form.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -143,10 +143,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
             borderRadius: BorderRadius.circular(40),
           ),
           child: PersonalForm(
-            
-            onTap: () {
-              
-            },
+            onTap: () {},
             nameController: _nameController,
             lastNameController: _lastNameController,
             dateController: _dateController,
@@ -175,7 +172,6 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
               Provider.of<AuthProvider>(context, listen: false)
                   .register(user, _email, _password)
                   .then((value) {
-                print(value);
               });
             },
             numberController: _phoneController,

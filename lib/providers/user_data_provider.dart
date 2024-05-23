@@ -25,7 +25,6 @@ class UserProvider extends ChangeNotifier {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       });
-      print(response.statusCode);
       if (response.statusCode == 200) {
         //print(response.body);
         var jsonResponse = json.decode(response.body);

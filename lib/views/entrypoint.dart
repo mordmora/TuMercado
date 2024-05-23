@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tu_mercado/views/login.dart';
+import 'package:tu_mercado/views/login/login.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});

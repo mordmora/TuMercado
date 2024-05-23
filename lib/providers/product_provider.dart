@@ -42,8 +42,7 @@ class ProductProvider extends ChangeNotifier {
         throw Exception('Error al cargar los productos');
       }
     } catch (error) {
-      print('Error fetching products: $error');
-      throw error; // Re-lanzamos el error para que el FutureBuilder lo maneje
+      rethrow; // Re-lanzamos el error para que el FutureBuilder lo maneje
     } finally {
       _isLoading = false;
       notifyListeners();

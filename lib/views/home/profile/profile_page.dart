@@ -58,7 +58,31 @@ class _ProfilePageState extends State<ProfilePage> {
                           RowInfo(label: "Nombre", content: userData.firstName),
                           RowInfo(label: "Email", content: userData.email),
                           const SizedBox(height: 40),
-                          ActionCard(),
+                          ActionCard(
+                              label: "Pedidos en progreso",
+                              icon: Icons.list,
+                              onTap: () {}),
+                          ActionCard(
+                            label: "Editar perfil",
+                            icon: Icons.edit,
+                            onTap: () {},
+                          ),
+                          ActionCard(
+                            label: "Cambiar contraseña",
+                            icon: Icons.password,
+                            onTap: () {},
+                          ),
+                          ActionCard(
+                              label: "Historial de compras",
+                              icon: Icons.history,
+                              onTap: () {}),
+                          ActionCard(
+                            label: "Cerrar sesión",
+                            icon: Icons.logout,
+                            onTap: () {
+                              
+                            },
+                          ),
                         ],
                       ),
                     )

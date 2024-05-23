@@ -13,12 +13,14 @@ class TextStyles {
     letterSpacing: BorderSide.strokeAlignInside,
     fontWeight: FontWeight.w500,
   );
+
   static const TextStyle normal = TextStyle(
     fontSize: 16,
     fontFamily: 'Outfit',
     letterSpacing: .2,
     fontWeight: FontWeight.w400,
   );
+
   static const TextStyle error = TextStyle(
     fontSize: 16,
     fontFamily: 'Outfit',
@@ -26,7 +28,9 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     color: Colors.red,
   );
+
   static const TextStyle productTitle = TextStyle(
+    color: Colors.black,
     fontSize: 18,
     fontFamily: 'Outfit',
     letterSpacing: .2,
@@ -34,6 +38,7 @@ class TextStyles {
   );
 
   static const TextStyle productPrice = TextStyle(
+    color: Colors.black,
     fontSize: 16,
     fontFamily: 'Outfit',
     letterSpacing: .2,

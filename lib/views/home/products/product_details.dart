@@ -68,7 +68,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           scrollDirection: Axis.vertical,
           child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: SizedBox(
                 child: Column(
                     mainAxisSize: MainAxisSize.max,

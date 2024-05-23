@@ -63,7 +63,6 @@ class _LoginState extends State<Login> {
 
     // ignore: no_leading_underscores_for_local_identifiers
     void _onRememberMeChanged(bool? value) {
-      print(value);
       setState(() {
         rememberMe = value!;
       });
@@ -151,7 +150,6 @@ class _LoginState extends State<Login> {
                           authProvider
                               .login(_email, _password)
                               .then((value) => {
-                                    print(value),
                                     if (value.contains("incorrectos"))
                                       {
                                         ScaffoldMessenger.of(context)

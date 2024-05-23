@@ -11,13 +11,11 @@ class RecoveryAccount extends StatefulWidget {
 }
 
 class _RecoveryAccountState extends State<RecoveryAccount> {
-  TextEditingController _emailController = TextEditingController();
-  String _email = "";
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   void initState() {
     _emailController.addListener(() {
-      _email = _emailController.text;
     });
     super.initState();
   }
