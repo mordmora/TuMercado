@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
+import 'package:tu_mercado/providers/auth_provider.dart';
 import 'package:tu_mercado/views/home/cart/cart_page.dart';
 import 'package:tu_mercado/views/home/profile/profile_page.dart';
 
@@ -15,6 +19,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PageController _pageController = PageController();
+  String _email = "";
+  String _password = "";
+  String _token = "";
+
+  late SharedPreferences prefs;
 
   List<Widget> pages = [
     const HomeWidget(),
@@ -38,12 +47,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void getSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    _email = prefs.getString("email") ?? "";
+    _password = prefs.getString("password") ?? "";
     setState(() {
+      AuthProvider()
+          .login(_email, _password)
+          .then((value) => {_token = value, prefs.setString("token", value)});
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_token);
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(

@@ -61,16 +61,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           ActionCard(
                               label: "Pedidos en progreso",
                               icon: Icons.list,
-                              onTap: () {}),
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed('/user/order_progress');
+                              }),
                           ActionCard(
                             label: "Editar perfil",
                             icon: Icons.edit,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).pushNamed('/user/edit');
+                            },
                           ),
                           ActionCard(
                             label: "Cambiar contraseña",
                             icon: Icons.password,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed('/user/change_pwd');
+                            },
                           ),
                           ActionCard(
                               label: "Historial de compras",
@@ -79,9 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ActionCard(
                             label: "Cerrar sesión",
                             icon: Icons.logout,
-                            onTap: () {
-                              
-                            },
+                            onTap: () {},
                           ),
                         ],
                       ),

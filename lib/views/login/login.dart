@@ -165,6 +165,8 @@ class _LoginState extends State<Login> {
                                       {
                                         prefs.setBool("rememberMe", rememberMe),
                                         prefs.setString("token", value),
+                                        prefs.setString("email", _email),
+                                        prefs.setString("password", _password),
                                         Navigator.pushNamedAndRemoveUntil(
                                             context, "/home", (route) => false)
                                       }
