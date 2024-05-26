@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/components/action_card.dart';
 import 'package:tu_mercado/components/row_info.dart';
 import 'package:tu_mercado/models/user_data.dart';
@@ -14,15 +15,22 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late UserData userData;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
+    getSharedPreferences();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void getSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {});
   }
 
   @override
@@ -87,7 +95,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           ActionCard(
                             label: "Cerrar sesión",
                             icon: Icons.logout,
-                            onTap: () {},
+                            onTap: () {
+                              print("cerrar sesion");
+                              prefs.clear();
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  "/", (route) => false);
+                            },
                           ),
                         ],
                       ),
