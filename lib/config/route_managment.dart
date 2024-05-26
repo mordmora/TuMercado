@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/views/entrypoint.dart';
+import 'package:tu_mercado/views/home/cart/order/create_order.dart';
 import 'package:tu_mercado/views/home/home_screen.dart';
 import 'package:tu_mercado/views/home/profile/profile_options/change_password.dart';
 import 'package:tu_mercado/views/home/profile/profile_options/edit_profile.dart';
@@ -30,6 +31,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const OrderProgress());
       case '/user/change_pwd':
         return MaterialPageRoute(builder: (context) => const ChangePassword());
+      case '/user/create_order':
+        return MaterialPageRoute(builder: (context) => const CreateOrder());
         
       default:
         return MaterialPageRoute(builder: (context) => const EntryPoint());

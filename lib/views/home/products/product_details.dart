@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/order.dart';
 import 'package:tu_mercado/models/products.dart';
+import 'package:tu_mercado/utils.dart';
 
 class ProductDetails extends StatefulWidget {
   final Product product;
@@ -22,6 +23,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   int quantity = 1;
   bool isValidQuantity = true;
   double _newPrice = 0;
+  String _formatedNewPrice = "";
   late SharedPreferences prefs;
 
   List<Order> clientOrders = List.empty(growable: true);
@@ -60,6 +62,19 @@ class _ProductDetailsState extends State<ProductDetails> {
     prefs.setStringList('orders', orders);
   }
 
+  void onQuantityChanged(String value) {
+    setState(() {
+      if (value.isEmpty || value == "0") {
+        isValidQuantity = false;
+      } else {
+        isValidQuantity = true;
+        quantity = int.parse(value);
+        _newPrice = widget.product.price * quantity;
+        _formatedNewPrice = getFormatMoneyString(_newPrice);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,8 +101,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           quantityController.text.isEmpty ||
                                   quantity == 0 ||
                                   quantity == 1
-                              ? "${widget.product.price}\$"
-                              : "$_newPrice\$",
+                              ? "${getFormatMoneyString(widget.product.price)}\$"
+                              : "$_formatedNewPrice\$",
                           style: TextStyles.productPrice),
                       const SizedBox(height: 20),
                       SizedBox(
@@ -98,17 +113,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           controller: quantityController,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value.isEmpty) {
-                                isValidQuantity = false;
-                              } else {
-                                isValidQuantity = true;
-                                quantity = int.parse(value);
-                                _newPrice = widget.product.price * quantity;
-                              }
-                            });
-                          },
+                          onChanged: onQuantityChanged,
                           decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
@@ -130,27 +135,33 @@ class _ProductDetailsState extends State<ProductDetails> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.21),
                       CupertinoButton(
+                        disabledColor: Colors.grey,
                         padding: EdgeInsets.zero,
-                        onPressed: () {
-                          clientOrders.add(Order(
-                            id: widget.product.id,
-                            name: widget.product.name,
-                            quantity: quantity.toDouble(),
-                            price: _newPrice,
-                          ));
-                          saveToSharedPreferences();
+                        onPressed: isValidQuantity
+                            ? () {
+                                clientOrders.add(Order(
+                                  description: widget.product.description,
+                                  id: widget.product.id,
+                                  name: widget.product.name,
+                                  quantity: quantity.toDouble(),
+                                  price: _newPrice,
+                                ));
+                                saveToSharedPreferences();
 
-                          Navigator.pop(context);
-                        },
+                                Navigator.pop(context);
+                              }
+                            : null,
                         child: Container(
                             height: 55,
                             width: double.infinity,
                             margin: const EdgeInsets.all(0),
                             padding: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                            decoration: BoxDecoration(
+                                color: isValidQuantity
+                                    ? Colors.black
+                                    : Colors.grey,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10))),
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

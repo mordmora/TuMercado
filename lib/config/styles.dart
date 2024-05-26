@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TextStyles {
+  static TextStyle getTittleStyleWithSize(double fontSize) {
+    return TextStyle(
+        fontSize: fontSize,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Outfit',
+        letterSpacing: BorderSide.strokeAlignInside);
+  }
+
   static const TextStyle title = TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.w500,
@@ -56,4 +64,11 @@ class TextStyles {
       fontFamily: 'Outfit',
       letterSpacing: .2,
       fontWeight: FontWeight.w500);
+
+  static const TextStyle hintStyle = TextStyle(
+      fontSize: 16,
+      fontFamily: 'Outfit',
+      letterSpacing: .2,
+      fontWeight: FontWeight.w400,
+      color: Colors.grey);
 }

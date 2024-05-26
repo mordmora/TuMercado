@@ -59,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(_token);
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
@@ -73,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _pageController.animateToPage(value,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut);
+          getSharedPreferences();
         }),
         items: const [
           BottomNavigationBarItem(

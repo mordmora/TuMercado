@@ -7,6 +7,7 @@ import 'package:tu_mercado/components/button.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/order.dart';
+import 'package:tu_mercado/utils.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -107,11 +108,11 @@ class _CartPageState extends State<CartPage> {
                                   style: TextStyles.subtitle,
                                 ),
                                 Text(
-                                  "Cantidad: ${order.quantity.toInt()}",
+                                  "Cantidad: ${order.quantity}",
                                   style: TextStyles.subtitle,
                                 ),
                                 Text(
-                                  "Precio: ${order.price.toString()}\$",
+                                  "Precio: ${getFormatMoneyString(order.price)}\$",
                                   style: TextStyles.subtitle,
                                 ),
                               ],
@@ -147,7 +148,9 @@ class _CartPageState extends State<CartPage> {
                       labelColor: Colors.white,
                       height: 55,
                       width: 200,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/user/create_order');
+                      },
                     ),
                   ),
                 )

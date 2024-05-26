@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/products.dart';
+import 'package:tu_mercado/utils.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -36,7 +37,7 @@ class _ProductCardState extends State<ProductCard> {
           Padding(
             padding: const EdgeInsets.only(bottom: 5, left: 5),
             child: Text(
-              "${widget.product.price}\$",
+              "${getFormatMoneyString(widget.product.price)}\$",
               style: TextStyles.productPrice,
             ),
           ),

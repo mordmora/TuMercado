@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tu_mercado/config/route_managment.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
+import 'package:tu_mercado/providers/order_provider.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
 import 'package:tu_mercado/providers/user_data_provider.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
