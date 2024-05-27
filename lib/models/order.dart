@@ -1,11 +1,11 @@
-class Order {
+class ProductOrder {
   final String name;
   final double quantity;
   final double price;
   final String description;
   final String id;
 
-  Order({
+  ProductOrder({
     required this.name,
     required this.quantity,
     required this.price,
@@ -13,19 +13,19 @@ class Order {
     required this.id,
   });
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
+  factory ProductOrder.fromJson(Map<String, dynamic> json) => ProductOrder(
         description: json["description"],
         name: json["name"],
-        quantity: json["quantity"],
+        quantity: json["amount"],
         price: json["price"],
-        id: json["id"],
+        id: json["stockId"],
       );
 
   Map<String, dynamic> toJson() => {
         "description": description,
         "name": name,
-        "quantity": quantity,
+        "amount": quantity,
         "price": price,
-        "id": id,
+        "stockId": id,
       };
 }

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/components/button.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
+import 'package:tu_mercado/main.dart';
 import 'package:tu_mercado/models/order.dart';
 import 'package:tu_mercado/utils.dart';
 
@@ -16,10 +17,21 @@ class CartPage extends StatefulWidget {
   State<CartPage> createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartPageState extends State<CartPage> with RouteAware {
   late SharedPreferences prefs;
-  List<Order> clientOrders = List.empty(growable: true);
+  List<ProductOrder> clientOrders = List.empty(growable: true);
   bool isLoading = true; // Variable para controlar la carga de datos
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPush() {
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -39,7 +51,7 @@ class _CartPageState extends State<CartPage> {
     List<String>? orders = prefs.getStringList('orders');
     if (orders != null) {
       clientOrders = orders.map((order) {
-        return Order.fromJson(jsonDecode(order));
+        return ProductOrder.fromJson(jsonDecode(order));
       }).toList();
     }
   }
@@ -83,7 +95,7 @@ class _CartPageState extends State<CartPage> {
                 ListView.builder(
                   itemCount: clientOrders.length,
                   itemBuilder: (context, index) {
-                    Order order = clientOrders[index];
+                    ProductOrder order = clientOrders[index];
                     return Padding(
                       padding: const EdgeInsets.only(
                           bottom: 10, left: 10, right: 10),
@@ -108,11 +120,11 @@ class _CartPageState extends State<CartPage> {
                                   style: TextStyles.subtitle,
                                 ),
                                 Text(
-                                  "Cantidad: ${order.quantity}",
+                                  "Cantidad: ${order.quantity.toInt()}",
                                   style: TextStyles.subtitle,
                                 ),
                                 Text(
-                                  "Precio: ${getFormatMoneyString(order.price)}\$",
+                                  "Precio: ${getFormatMoneyString(order.price.toDouble())}\$",
                                   style: TextStyles.subtitle,
                                 ),
                               ],

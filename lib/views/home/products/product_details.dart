@@ -26,7 +26,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   String _formatedNewPrice = "";
   late SharedPreferences prefs;
 
-  List<Order> clientOrders = List.empty(growable: true);
+  List<ProductOrder> clientOrders = List.empty(growable: true);
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     List<String>? orders = prefs.getStringList('orders');
     if (orders != null) {
       clientOrders = orders.map((order) {
-        return Order.fromJson(jsonDecode(order));
+        return ProductOrder.fromJson(jsonDecode(order));
       }).toList();
     }
   }
@@ -139,7 +139,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         padding: EdgeInsets.zero,
                         onPressed: isValidQuantity
                             ? () {
-                                clientOrders.add(Order(
+                                clientOrders.add(ProductOrder(
                                   description: widget.product.description,
                                   id: widget.product.id,
                                   name: widget.product.name,

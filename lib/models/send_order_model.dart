@@ -1,3 +1,5 @@
+import 'package:tu_mercado/models/order.dart';
+
 class Order {
   double value;
   String details;
@@ -19,51 +21,17 @@ class Order {
   }
 }
 
-class Product {
-  String name;
-  String description;
-  double price;
-  int amount;
-  String stockId;
-
-  Product(
-      {required this.name,
-      required this.description,
-      required this.price,
-      required this.amount,
-      required this.stockId});
-
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      name: json['name'],
-      description: json['description'],
-      price: json['price'],
-      amount: json['amount'],
-      stockId: json['stockId'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'description': description,
-      'price': price,
-      'amount': amount,
-      'stockId': stockId,
-    };
-  }
-}
 
 class OrderData {
   Order order;
-  List<Product> products;
+  List<ProductOrder> products;
 
   OrderData({required this.order, required this.products});
 
   factory OrderData.fromJson(Map<String, dynamic> json) {
     var productList = json['products'] as List;
-    List<Product> productItems =
-        productList.map((i) => Product.fromJson(i)).toList();
+    List<ProductOrder> productItems =
+        productList.map((i) => ProductOrder.fromJson(i)).toList();
 
     return OrderData(
       order: Order.fromJson(json['order']),

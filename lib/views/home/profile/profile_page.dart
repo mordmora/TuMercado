@@ -65,9 +65,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(height: 20),
                           RowInfo(label: "Nombre", content: userData.firstName),
                           RowInfo(label: "Email", content: userData.email),
-                          const SizedBox(height: 40),
+                          const RowInfo(label: "Plan", content: "Normal"),
+                          const SizedBox(height: 20),
                           ActionCard(
-                              label: "Pedidos en progreso",
+                              label: "Mis pedidos",
                               icon: Icons.list,
                               onTap: () {
                                 Navigator.of(context)
@@ -81,16 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           ),
                           ActionCard(
-                            label: "Cambiar contraseña",
-                            icon: Icons.password,
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed('/user/change_pwd');
-                            },
-                          ),
-                          ActionCard(
-                              label: "Historial de compras",
-                              icon: Icons.history,
+                              label: "Comunicate con soporte",
+                              icon: Icons.help,
                               onTap: () {}),
                           ActionCard(
                             label: "Cerrar sesión",

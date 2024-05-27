@@ -6,6 +6,8 @@ import 'package:tu_mercado/providers/order_provider.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
 import 'package:tu_mercado/providers/user_data_provider.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 void main() {
   runApp(const MyApp());
 }
@@ -31,7 +33,8 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             fontFamily: 'Outfit',
           ),
-          child: const MaterialApp(
+          child: MaterialApp(
+            navigatorObservers: [routeObserver],
             title: 'Flutter Demo',
             debugShowCheckedModeBanner: false,
             initialRoute: '/',

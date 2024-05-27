@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/User.dart';
@@ -18,6 +19,27 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> with TickerProviderStateMixin {
   double page = 0;
   double pageClamp = 0;
+  late SharedPreferences prefs;
+
+  void getSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _pageController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _nameController.dispose();
+    _lastNameController.dispose();
+    _dateController.dispose();
+    _phoneController.dispose();
+    _adressController.dispose();
+  }
 
   final PageController _pageController =
       PageController(initialPage: 0, viewportFraction: 0.95);
@@ -50,6 +72,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    getSharedPreferences();
     super.initState();
     _lastNameController.addListener(() {
       _lastName = _lastNameController.text;
@@ -76,19 +99,6 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
       _confirmPassword = _confirmPasswordController.text;
     });
     _pageController.addListener(pageListener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.removeListener(pageListener);
-    _pageController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _nameController.dispose();
-    _lastNameController.dispose();
-    _dateController.dispose();
   }
 
   @override
@@ -171,7 +181,10 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
               User user = User(_name, _lastName, _date, _phone, _adress);
               Provider.of<AuthProvider>(context, listen: false)
                   .register(user, _email, _password)
-                  .then((value) {
+                  .then((value) {})
+                  .whenComplete(() {
+                prefs.setBool("rememberMe", true);
+                Navigator.pushReplacementNamed(context, '/login');
               });
             },
             numberController: _phoneController,

@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/components/button.dart';
 import 'package:tu_mercado/components/row_info.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/order.dart';
+import 'package:tu_mercado/models/send_order_model.dart';
 import 'package:tu_mercado/providers/order_provider.dart';
 import 'package:tu_mercado/utils.dart';
 
@@ -20,7 +22,8 @@ class CreateOrder extends StatefulWidget {
 class _CreateOrderState extends State<CreateOrder> {
   bool isLoading = true;
   late SharedPreferences prefs;
-  List<Order> clientOrders = List.empty(growable: true);
+  String _response = "";
+  List<ProductOrder> clientOrders = List.empty(growable: true);
 
   @override
   void initState() {
@@ -46,17 +49,46 @@ class _CreateOrderState extends State<CreateOrder> {
     List<String>? orders = prefs.getStringList('orders');
     if (orders != null) {
       clientOrders = orders.map((order) {
-        return Order.fromJson(jsonDecode(order));
+        return ProductOrder.fromJson(jsonDecode(order));
       }).toList();
     }
   }
 
   double getTotalPrice() {
     double total = 0;
-    for (Order order in clientOrders) {
+    for (ProductOrder order in clientOrders) {
       total += order.price;
     }
     return total;
+  }
+
+  void _launchMercadoPago() async {
+    final theme = Theme.of(context);
+    try {
+      await launchUrl(
+        Uri.parse('https://flutter.dev'),
+        customTabsOptions: CustomTabsOptions(
+          colorSchemes: CustomTabsColorSchemes.defaults(
+            toolbarColor: theme.colorScheme.surface,
+          ),
+          shareState: CustomTabsShareState.on,
+          urlBarHidingEnabled: true,
+          showTitle: true,
+          closeButton: CustomTabsCloseButton(
+            icon: CustomTabsCloseButtonIcons.back,
+          ),
+        ),
+        safariVCOptions: SafariViewControllerOptions(
+          preferredBarTintColor: theme.colorScheme.surface,
+          preferredControlTintColor: theme.colorScheme.onSurface,
+          barCollapsingEnabled: true,
+          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+        ),
+      );
+    } catch (e) {
+      // If the URL launch fails, an exception will be thrown. (For example, if no browser app is installed on the Android device.)
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -171,8 +203,35 @@ class _CreateOrderState extends State<CreateOrder> {
                 height: 55,
                 width: double.infinity,
                 onTap: () {
+                  _launchMercadoPago();
+                  /*OrderData orderData = OrderData(
+                    order: Order(value: getTotalPrice(), details: ""),
+                    products: clientOrders,
+                  );
+
                   Provider.of<OrderProvider>(context, listen: false)
-                      .createNewOrder();
+                      .createNewOrder(orderData)
+                      .then((value) => {
+                            _response = value,
+                            print(value),
+                          })
+                      .whenComplete(() {
+                    clientOrders.clear();
+                    saveToSharedPreferences();
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: const Text(""),
+                              content: Text(_response),
+                              actions: [
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context, "/home", (route) => false),
+                                    child: const Text("Ok"))
+                              ],
+                            ));
+                  });*/
                 },
               )
             ],
