@@ -183,8 +183,11 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
                   .register(user, _email, _password)
                   .then((value) {})
                   .whenComplete(() {
+                prefs.setString("email", _email);
+                prefs.setString("password", _password);
                 prefs.setBool("rememberMe", true);
-                Navigator.pushReplacementNamed(context, '/login');
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/home', (route) => false);
               });
             },
             numberController: _phoneController,

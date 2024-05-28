@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/models/products.dart';
+import 'package:tu_mercado/providers/auth_provider.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
 import 'package:tu_mercado/views/home/products/product_details.dart';
 
@@ -16,13 +18,30 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  late SharedPreferences prefs;
   late List<Product> products;
   late Future<List<Product>> fetchProducts;
 
+  String _email = "";
+  String _password = "";
+
   @override
   void initState() {
+    getSharedPreferences();
     super.initState();
     fetchProducts = ProductProvider().fetchProducts();
+  }
+
+  Future<void> getSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    _email = prefs.getString("email") ?? "";
+    _password = prefs.getString("password") ?? "";
+    AuthProvider()
+        .login(_email, _password)
+        .then((value) => {prefs.setString("token", value)})
+        .whenComplete(() {
+      setState(() {});
+    });
   }
 
   @override
