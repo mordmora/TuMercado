@@ -6,6 +6,13 @@ import 'package:tu_mercado/models/send_order_model.dart';
 import 'package:http/http.dart' as http;
 
 class OrderProvider extends ChangeNotifier {
+
+
+ /*
+  TODO: 
+  */
+
+
   late SharedPreferences prefs;
   String _token = "";
   static const String _baseUrl = 'http://commixer.pythonanywhere.com';
@@ -20,8 +27,6 @@ class OrderProvider extends ChangeNotifier {
             "Authorization": "Bearer $_token"
           },
           body: jsonEncode(orderData.toJson()));
-      print(_token);
-      print(response.body);
       if (response.statusCode == 200) {
         notifyListeners();
         return "output is null";
@@ -30,7 +35,7 @@ class OrderProvider extends ChangeNotifier {
         return messageBody + response.statusCode.toString();
       }
     } catch (e) {
-      return "Error exception$e";
+      return "$e";
     }
   }
 }

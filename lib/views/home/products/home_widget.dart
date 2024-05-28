@@ -15,8 +15,6 @@ class HomeWidget extends StatefulWidget {
   State<HomeWidget> createState() => _HomeWidgetState();
 }
 
-GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
 class _HomeWidgetState extends State<HomeWidget> {
   late List<Product> products;
   late Future<List<Product>> fetchProducts;
@@ -31,7 +29,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      key: _scaffoldKey,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder<List<Product>>(

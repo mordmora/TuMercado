@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tu_mercado/config/route_managment.dart';
@@ -12,8 +15,41 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _appLinkSubscription;
+
+  @override
+  void initState() {
+    initDeepLinks();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _appLinkSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> initDeepLinks() async {
+    _appLinks = AppLinks();
+    _appLinkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      print(uri);
+      openAppLink(uri);
+    });
+  }
+
+  void openAppLink(Uri uri) {
+    _navigatorKey.currentState?.pushNamed(uri.path);
+  }
 
   // This widget is the root of your application.
   @override
@@ -34,8 +70,9 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Outfit',
           ),
           child: MaterialApp(
+            navigatorKey: _navigatorKey,
             navigatorObservers: [routeObserver],
-            title: 'Flutter Demo',
+            title: 'Tu Mercado',
             debugShowCheckedModeBanner: false,
             initialRoute: '/',
             onGenerateRoute: RouteGenerator.generateRoute,
