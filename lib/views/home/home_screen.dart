@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("token loaded: " + _token);
+    print("token loaded: $_token");
     return _isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
@@ -105,7 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
             body: SafeArea(
                 child: PageView(
               controller: _pageController,
-              onPageChanged: (value) => setState(() => _index = value),
+              onPageChanged: (value) {
+                setState(() {
+                  getSharedPreferences();
+                  _index = value;
+                });
+              },
               children: pages,
             )),
           );

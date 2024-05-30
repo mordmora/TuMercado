@@ -203,8 +203,7 @@ class _CreateOrderState extends State<CreateOrder> {
                 height: 55,
                 width: double.infinity,
                 onTap: () {
-                  _launchMercadoPago();
-                  /*OrderData orderData = OrderData(
+                  OrderData orderData = OrderData(
                     order: Order(value: getTotalPrice(), details: ""),
                     products: clientOrders,
                   );
@@ -212,8 +211,7 @@ class _CreateOrderState extends State<CreateOrder> {
                   Provider.of<OrderProvider>(context, listen: false)
                       .createNewOrder(orderData)
                       .then((value) => {
-                            _response = value,
-                            print(value),
+                            _response = value.link,
                           })
                       .whenComplete(() {
                     clientOrders.clear();
@@ -231,7 +229,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                     child: const Text("Ok"))
                               ],
                             ));
-                  });*/
+                  });
                 },
               )
             ],

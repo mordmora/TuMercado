@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/components/button.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/main.dart';
+import 'package:tu_mercado/models/mercado_pago_response.dart';
 import 'package:tu_mercado/models/order.dart';
+import 'package:tu_mercado/models/send_order_model.dart';
+import 'package:tu_mercado/providers/order_provider.dart';
 import 'package:tu_mercado/utils.dart';
 
 class CartPage extends StatefulWidget {
@@ -21,6 +25,8 @@ class _CartPageState extends State<CartPage> with RouteAware {
   late SharedPreferences prefs;
   List<ProductOrder> clientOrders = List.empty(growable: true);
   bool isLoading = true; // Variable para controlar la carga de datos
+  String _response = "";
+  List<MercadoPagoResponse> createdOrders = List.empty(growable: true);
 
   @override
   void didChangeDependencies() {
@@ -42,6 +48,7 @@ class _CartPageState extends State<CartPage> with RouteAware {
   Future<void> getSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
     await readFromSharedPreferences();
+    await readCreatedOrders();
     setState(() {
       isLoading = false; // Indica que la carga ha terminado
     });
@@ -56,9 +63,40 @@ class _CartPageState extends State<CartPage> with RouteAware {
     }
   }
 
+  Future<void> readCreatedOrders() async {
+    List<String>? orders = prefs.getStringList('createdOrders');
+    print(orders?.length);
+    if (orders != null) {
+      createdOrders = orders.map((order) {
+        return MercadoPagoResponse.fromJson(jsonDecode(order));
+      }).toList();
+    }
+  }
+
+  Future<void> saveToSharedPreferences() async {
+    List<String> productOrders = clientOrders
+        .map((productOrder) => jsonEncode(productOrder.toJson()))
+        .toList();
+    prefs.setStringList('orders', productOrders);
+  }
+
+  Future<void> saveOrderToSharedPreferences() async {
+    List<String> saveOrder =
+        createdOrders.map((order) => jsonEncode(order.toJson())).toList();
+    prefs.setStringList('createdOrders', saveOrder);
+  }
+
   @override
   void dispose() {
     super.dispose();
+  }
+
+  double getTotalPrice() {
+    double total = 0;
+    for (ProductOrder order in clientOrders) {
+      total += order.price;
+    }
+    return total;
   }
 
   @override
@@ -161,7 +199,36 @@ class _CartPageState extends State<CartPage> with RouteAware {
                       height: 55,
                       width: 200,
                       onTap: () {
-                        Navigator.pushNamed(context, '/user/create_order');
+                        OrderData orderData = OrderData(
+                          order: Order(value: getTotalPrice(), details: ""),
+                          products: clientOrders,
+                        );
+
+                        Provider.of<OrderProvider>(context, listen: false)
+                            .createNewOrder(orderData)
+                            .then((value) => {
+                                  _response = value.link,
+                                  createdOrders.add(value),
+                                })
+                            .whenComplete(() {
+                          clientOrders.clear();
+                          saveToSharedPreferences();
+                          saveOrderToSharedPreferences();
+
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text(""),
+                                    content: Text(_response),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text("Ok"))
+                                    ],
+                                  ));
+                        });
                       },
                     ),
                   ),
