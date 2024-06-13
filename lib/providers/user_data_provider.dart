@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/models/user_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:tu_mercado/utils.dart';
 
 class UserProvider extends ChangeNotifier {
-  static const String _baseUrl = 'http://commixer.pythonanywhere.com';
+  static final String _baseUrl = BASE_URL;
   bool isLoading = false;
   late UserData _userData;
 

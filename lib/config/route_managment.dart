@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tu_mercado/alert.dart';
 import 'package:tu_mercado/views/entrypoint.dart';
 import 'package:tu_mercado/views/home/cart/order/create_order.dart';
+import 'package:tu_mercado/views/home/cart/order/payment_states/payment_failure.dart';
 import 'package:tu_mercado/views/home/cart/order/payment_states/payment_sucess.dart';
 import 'package:tu_mercado/views/home/home_screen.dart';
 //import 'package:tu_mercado/views/home/profile/profile_options/change_password.dart';
@@ -36,6 +38,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const CreateOrder());
       case '/payment/success/app':
         return MaterialPageRoute(builder: (context) => const PaymentSucess());
+      case '/payment/failed/app':
+        return MaterialPageRoute(builder: (context) => const PaymentFailure());
+      case '/alert':
+        return MaterialPageRoute(builder: (context) => const Alert());
       default:
         return MaterialPageRoute(builder: (context) => const EntryPoint());
     }

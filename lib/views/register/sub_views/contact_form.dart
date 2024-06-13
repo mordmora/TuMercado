@@ -1,16 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tu_mercado/components/text_field.dart';
 import 'package:tu_mercado/config/styles.dart';
 
 class ContactForm extends StatefulWidget {
   final TextEditingController numberController;
   final TextEditingController adressController;
+  final List<TextInputFormatter>? filters;
   final void Function()? onTap;
 
   const ContactForm(
       {super.key,
       required this.onTap,
+      this.filters,
       required this.numberController,
       required this.adressController});
 
@@ -25,6 +28,7 @@ class _ContactFormState extends State<ContactForm> {
       const Text("Numero de teléfono", style: TextStyles.subtitle),
       const SizedBox(height: 10),
       CustomTextField(
+        formatter: widget.filters,
         isPassword: false,
         controller: widget.numberController,
       ),

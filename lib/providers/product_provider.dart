@@ -4,9 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/models/product_response.dart';
 import 'package:tu_mercado/models/products.dart';
+import 'package:tu_mercado/utils.dart';
 
 class ProductProvider extends ChangeNotifier {
-  static const String _baseUrl = 'http://commixer.pythonanywhere.com';
+  static final String _baseUrl = BASE_URL;
 
   List<Product> _products = [];
   bool _isLoading = false;

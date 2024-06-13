@@ -5,10 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/models/mercado_pago_response.dart';
 import 'package:tu_mercado/models/send_order_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:tu_mercado/utils.dart';
 
 class OrderProvider extends ChangeNotifier {
   late SharedPreferences prefs;
-  static const String _baseUrl = 'http://commixer.pythonanywhere.com';
+  static final String _baseUrl = BASE_URL;
 
   Future<MercadoPagoResponse> createNewOrder(OrderData orderData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -56,13 +56,14 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
 
   String _email = "";
   String _password = "";
-  String _confirmPassword = "";
   String _name = "";
   String _lastName = "";
   String _date = "";
   String _phone = "";
   String _adress = "";
   int activeIndex = 0;
+  // ignore: unused_field, prefer_final_fields
+  bool _register_status = false;
   void pageListener() {
     setState(() {
       page = _pageController.page!;
@@ -95,9 +96,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
     _passwordController.addListener(() {
       _password = _passwordController.text;
     });
-    _confirmPasswordController.addListener(() {
-      _confirmPassword = _confirmPasswordController.text;
-    });
+    _confirmPasswordController.addListener(() {});
     _pageController.addListener(pageListener);
   }
 
@@ -153,7 +152,12 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
             borderRadius: BorderRadius.circular(40),
           ),
           child: PersonalForm(
-            onTap: () {},
+            onTap: () {
+              _pageController.nextPage(
+                curve: Curves.easeInOutCubicEmphasized,
+                duration: const Duration(milliseconds: 300),
+              );
+            },
             nameController: _nameController,
             lastNameController: _lastNameController,
             dateController: _dateController,
@@ -178,17 +182,43 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
           ),
           child: ContactForm(
             onTap: () {
-              User user = User(_name, _lastName, _date, _phone, _adress);
-              Provider.of<AuthProvider>(context, listen: false)
-                  .register(user, _email, _password)
-                  .then((value) {})
-                  .whenComplete(() {
-                prefs.setString("email", _email);
-                prefs.setString("password", _password);
-                prefs.setBool("rememberMe", true);
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (route) => false);
-              });
+              if (_date == "" || _phone == "" || _adress == "") {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Completa todos los campos"),
+                  ),
+                );
+              } else {
+                User user = User(_name, _lastName, _date, _phone, _adress);
+                Provider.of<AuthProvider>(context, listen: false)
+                    .register(user, _email, _password)
+                    .then((value) {
+                  print(value);
+                  if (value != "Registro completado") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(value),
+                      ),
+                    );
+                    _register_status = false;
+                  } else {
+                    _register_status = true;
+                  }
+                }).whenComplete(() {
+                  if (_register_status) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Registro completado"),
+                      ),
+                    );
+                    prefs.setBool("rememberMe", true);
+                    prefs.setString("email", _email);
+                    prefs.setString("password", _password);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/home', (route) => false);
+                  }
+                });
+              }
             },
             numberController: _phoneController,
             adressController: _adressController,

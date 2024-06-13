@@ -147,9 +147,11 @@ class _LoginState extends State<Login> {
                         width: width,
                         height: height * 0.07,
                         onTap: () {
+                          print("login pressed");
                           authProvider
                               .login(_email, _password)
                               .then((value) => {
+                                    print(value),
                                     if (value.contains("incorrectos"))
                                       {
                                         ScaffoldMessenger.of(context)
@@ -163,6 +165,7 @@ class _LoginState extends State<Login> {
                                       }
                                     else
                                       {
+                                        print("success"),
                                         prefs.setBool("rememberMe", rememberMe),
                                         prefs.setString("token", value),
                                         prefs.setString("email", _email),
@@ -176,15 +179,6 @@ class _LoginState extends State<Login> {
                         labelColor: Colors.white,
                         label: "Iniciar Sesión"),
                     SizedBox(height: height * 0.02),
-                    CustomButton(
-                      width: width,
-                      height: height * 0.07,
-                      onTap: () {},
-                      color: Palette.facebookColor,
-                      labelColor: Colors.white,
-                      label: "Iniciar con Facebook",
-                    ),
-                    SizedBox(height: height * 0.03),
                     Row(
                       children: [
                         Expanded(
@@ -199,7 +193,7 @@ class _LoginState extends State<Login> {
                                 width: width, color: Colors.black, height: 1)),
                       ],
                     ),
-                    SizedBox(height: height * 0.03),
+                    SizedBox(height: height * 0.02),
                     CustomButton(
                         width: width,
                         height: height * 0.07,

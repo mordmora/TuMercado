@@ -1,3 +1,9 @@
+// ignore: non_constant_identifier_names
+// ignore_for_file: unused_element
+
+// ignore: non_constant_identifier_names
+String BASE_URL = "http://10.0.2.2:5000";
+
 String getFormatMoneyString(double num) {
   // Convertir el número a una cadena con dos decimales
   String numero = num.toString();
