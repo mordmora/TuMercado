@@ -207,8 +207,8 @@ class _CartPageState extends State<CartPage> with RouteAware {
                         Provider.of<OrderProvider>(context, listen: false)
                             .createNewOrder(orderData)
                             .then((value) => {
-                                  _response = value.link,
-                                  createdOrders.add(value),
+                                  _response = value,
+                                  print(_response),
                                 })
                             .whenComplete(() {
                           clientOrders.clear();

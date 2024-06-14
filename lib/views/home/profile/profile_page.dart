@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               icon: Icons.list,
                               onTap: () {
                                 Navigator.of(context)
-                                    .pushNamed('/user/order_progress');
+                                    .pushNamed('/user/my_orders');
                               }),
                           ActionCard(
                             label: "Editar perfil",

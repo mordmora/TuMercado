@@ -30,7 +30,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       case '/user/edit':
         return MaterialPageRoute(builder: (context) => const EditProfile());
-      case '/user/order_progress':
+      case '/user/my_orders':
         return MaterialPageRoute(builder: (context) => const OrderProgress());
       //case '/user/change_pwd':
       //  return MaterialPageRoute(builder: (context) => const ChangePassword());

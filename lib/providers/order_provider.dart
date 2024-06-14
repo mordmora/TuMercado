@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/models/mercado_pago_response.dart';
+import 'package:tu_mercado/models/order_response.dart';
 import 'package:tu_mercado/models/send_order_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:tu_mercado/utils.dart';
@@ -10,8 +11,9 @@ import 'package:tu_mercado/utils.dart';
 class OrderProvider extends ChangeNotifier {
   late SharedPreferences prefs;
   static final String _baseUrl = BASE_URL;
+  late OrderResponse orderResponse;
 
-  Future<MercadoPagoResponse> createNewOrder(OrderData orderData) async {
+  Future<String> createNewOrder(OrderData orderData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString("token") ?? "";
 
@@ -27,25 +29,35 @@ class OrderProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        return MercadoPagoResponse.fromJson(
-            jsonDecode(response.body)["message"]);
+        return jsonDecode(response.body)["message"];
       } else {
         String messageBody = jsonDecode(response.body)["message"];
-        return MercadoPagoResponse(
-          link: "",
-          linkSandbox: "",
-          message:
-              "Error al crear el pedido: $messageBody - Código de estado HTTP: ${response.statusCode}",
-          orderId: "",
-        );
+        return messageBody;
       }
     } catch (e) {
-      return MercadoPagoResponse(
-        link: "",
-        linkSandbox: "",
-        message: "Error: $e",
-        orderId: "",
-      );
+      return "Error exception $e";
+    }
+  }
+
+  Future<OrderResponse> getOrders() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String _token = prefs.getString("token") ?? "";
+      final Uri url = Uri.parse("$_baseUrl/user/getOrders");
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $_token"
+      });
+
+      if (response.statusCode == 200) {
+        notifyListeners();
+        orderResponse = orderResponseFromJson(response.body);
+        return orderResponse;
+      } else {
+        throw Exception("Error al cargar las ordenes");
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

@@ -58,7 +58,7 @@ class _PaymentSucessState extends State<PaymentSucess> {
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/', (route) => false);
               },
-              child: Text("Volver"))
+              child: const Text("Volver"))
         ],
       )),
     ));

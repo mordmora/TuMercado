@@ -6,8 +6,10 @@ class Product {
   final int stock;
   final String createAt;
   final String updateAt;
+  final image;
 
   Product({
+    required this.image,
     required this.id,
     required this.name,
     required this.description,
@@ -19,6 +21,7 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
+      image: json['file'],
       id: json['id'],
       name: json['name'],
       description: json['description'],
@@ -38,6 +41,7 @@ class Product {
       'stock': stock,
       'createAt': createAt,
       'updateAt': updateAt,
+      'file': image
     };
   }
 }

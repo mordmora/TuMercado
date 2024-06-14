@@ -211,7 +211,8 @@ class _CreateOrderState extends State<CreateOrder> {
                   Provider.of<OrderProvider>(context, listen: false)
                       .createNewOrder(orderData)
                       .then((value) => {
-                            _response = value.link,
+                            _response = value,
+                            print(_response),
                           })
                       .whenComplete(() {
                     clientOrders.clear();
