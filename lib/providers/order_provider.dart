@@ -29,7 +29,8 @@ class OrderProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)["message"];
+        print(jsonDecode(response.body));
+        return jsonDecode(response.body)["message"]["message"];
       } else {
         String messageBody = jsonDecode(response.body)["message"];
         return messageBody;

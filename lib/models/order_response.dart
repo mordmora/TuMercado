@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:tu_mercado/models/products.dart';
-
 OrderResponse orderResponseFromJson(String str) =>
     OrderResponse.fromJson(json.decode(str));
 
@@ -30,7 +28,7 @@ class Order {
   String id;
   String link;
   bool payment;
-  List<Product> products;
+  List<Products> products;
   String status;
   String updateAt;
   String userId;
@@ -57,8 +55,8 @@ class Order {
         id: json["id"],
         link: json["link"],
         payment: json["payment"],
-        products: List<Product>.from(
-            json["products"].map((x) => Product.fromJson(x))),
+        products: List<Products>.from(
+            json["products"].map((x) => Products.fromJson(x))),
         status: json["status"],
         updateAt: json["updateAt"],
         userId: json["userId"],
@@ -77,5 +75,53 @@ class Order {
         "updateAt": updateAt,
         "userId": userId,
         "value": value,
+      };
+}
+
+class Products {
+  int amount;
+  String createAt;
+  String description;
+  String id;
+  String name;
+  String orderId;
+  double price;
+  String stockId;
+  String updateAt;
+
+  Products({
+    required this.amount,
+    required this.createAt,
+    required this.description,
+    required this.id,
+    required this.name,
+    required this.orderId,
+    required this.price,
+    required this.stockId,
+    required this.updateAt,
+  });
+
+  factory Products.fromJson(Map<String, dynamic> json) => Products(
+        amount: json["amount"],
+        createAt: json["createAt"],
+        description: json["description"],
+        id: json["id"],
+        name: json["name"],
+        orderId: json["orderId"],
+        price: json["price"],
+        stockId: json["stockId"],
+        updateAt: json["updateAt"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "amount": amount,
+        "createAt": createAt,
+        "description": description,
+        "id": id,
+        "name": name,
+        "orderId": orderId,
+        "price": price,
+        "stockId": stockId,
+        "updateAt": updateAt,
       };
 }
