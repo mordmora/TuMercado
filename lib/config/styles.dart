@@ -54,12 +54,14 @@ class TextStyles {
   );
 
   static const TextStyle profileText = TextStyle(
+      color: Colors.black,
       fontSize: 18,
       fontFamily: 'Outfit',
       letterSpacing: .2,
       fontWeight: FontWeight.w400);
 
   static const TextStyle profileName = TextStyle(
+      color: Colors.black,
       fontSize: 18,
       fontFamily: 'Outfit',
       letterSpacing: .2,

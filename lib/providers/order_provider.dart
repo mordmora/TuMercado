@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tu_mercado/models/mercado_pago_response.dart';
 import 'package:tu_mercado/models/order_response.dart';
 import 'package:tu_mercado/models/send_order_model.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +28,6 @@ class OrderProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        print(jsonDecode(response.body));
         return jsonDecode(response.body)["message"]["message"];
       } else {
         String messageBody = jsonDecode(response.body)["message"];
@@ -39,6 +37,7 @@ class OrderProvider extends ChangeNotifier {
       return "Error exception $e";
     }
   }
+ 
 
   Future<OrderResponse> getOrders() async {
     try {

@@ -2,25 +2,25 @@
 // ignore_for_file: unused_element
 
 // ignore: non_constant_identifier_names
+import 'dart:convert';
+
+import 'package:intl/intl.dart';
+
 String BASE_URL = "http://10.0.2.2:5000";
 
 String getFormatMoneyString(double num) {
-  // Convertir el número a una cadena con dos decimales
   String numero = num.toString();
   List<String> partes = numero.split('.');
 
   String parteEntera = partes[0];
   String parteDecimal = partes[1];
 
-  // Formatear la parte entera con comas como separadores de miles
   String parteEnteraFormateada = '';
   int contador = 0;
 
-  // Determinar si el número es negativo
   bool esNegativo = parteEntera.startsWith('-');
   if (esNegativo) {
-    parteEntera =
-        parteEntera.substring(1); // Remover el signo negativo para formatear
+    parteEntera = parteEntera.substring(1);
   }
 
   for (int i = parteEntera.length - 1; i >= 0; i--) {
@@ -33,11 +33,20 @@ String getFormatMoneyString(double num) {
   }
 
   if (esNegativo) {
-    parteEnteraFormateada =
-        '-' + parteEnteraFormateada; // Agregar el signo negativo de vuelta
+    parteEnteraFormateada = '-' + parteEnteraFormateada;
   }
 
-  // Construir la cadena final con el símbolo de dólar
   String numeroFormateado = '\$$parteEnteraFormateada.$parteDecimal';
   return numeroFormateado;
 }
+
+String formatDate(String dateStr) {
+  final DateFormat inputFormat = DateFormat('EEE, dd MMM yyyy HH:mm:ss z');
+
+  final DateTime dateTime = inputFormat.parse(dateStr);
+
+  final DateFormat outputFormat = DateFormat('dd MMM yyyy ');
+
+  return outputFormat.format(dateTime);
+}
+

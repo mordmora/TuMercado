@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/alert.dart';
+import 'package:tu_mercado/models/order_response.dart';
 import 'package:tu_mercado/views/entrypoint.dart';
 import 'package:tu_mercado/views/home/cart/order/create_order.dart';
 import 'package:tu_mercado/views/home/cart/order/payment_states/payment_failure.dart';
@@ -7,7 +8,9 @@ import 'package:tu_mercado/views/home/cart/order/payment_states/payment_sucess.d
 import 'package:tu_mercado/views/home/home_screen.dart';
 //import 'package:tu_mercado/views/home/profile/profile_options/change_password.dart';
 import 'package:tu_mercado/views/home/profile/profile_options/edit_profile.dart';
-import 'package:tu_mercado/views/home/profile/profile_options/order_progress.dart';
+import 'package:tu_mercado/views/home/profile/profile_options/orders/order_confirm.dart';
+import 'package:tu_mercado/views/home/profile/profile_options/orders/order_details.dart';
+import 'package:tu_mercado/views/home/profile/profile_options/orders/order_progress.dart';
 import 'package:tu_mercado/views/login/login.dart';
 import 'package:tu_mercado/views/login/recovery.dart';
 import 'package:tu_mercado/views/login/recovery_code.dart';
@@ -42,6 +45,15 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const PaymentFailure());
       case '/alert':
         return MaterialPageRoute(builder: (context) => const Alert());
+      case '/order/details':
+        return MaterialPageRoute(
+            builder: (context) =>
+                OrderDetails(order: settings.arguments as ROrder));
+      case '/order/confirm':
+        return MaterialPageRoute(
+            builder: (context) => OrderConfirm(
+                  args: settings.arguments as Args,
+                ));
       default:
         return MaterialPageRoute(builder: (context) => const EntryPoint());
     }

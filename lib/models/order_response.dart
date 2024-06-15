@@ -6,22 +6,24 @@ OrderResponse orderResponseFromJson(String str) =>
 String orderResponseToJson(OrderResponse data) => json.encode(data.toJson());
 
 class OrderResponse {
-  List<Order> orders;
+  List<ROrder> orders;
 
   OrderResponse({
     required this.orders,
   });
 
   factory OrderResponse.fromJson(Map<String, dynamic> json) => OrderResponse(
-        orders: List<Order>.from(json["orders"].map((x) => Order.fromJson(x))),
+        orders: List<ROrder>.from(json["orders"].map((x) => ROrder.fromJson(x))),
       );
+
+  get value => null;
 
   Map<String, dynamic> toJson() => {
         "orders": List<dynamic>.from(orders.map((x) => x.toJson())),
       };
 }
 
-class Order {
+class ROrder {
   String createAt;
   dynamic deliveryId;
   String details;
@@ -34,7 +36,7 @@ class Order {
   String userId;
   double value;
 
-  Order({
+  ROrder({
     required this.createAt,
     required this.deliveryId,
     required this.details,
@@ -48,7 +50,7 @@ class Order {
     required this.value,
   });
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
+  factory ROrder.fromJson(Map<String, dynamic> json) => ROrder(
         createAt: json["createAt"],
         deliveryId: json["deliveryId"],
         details: json["details"],
