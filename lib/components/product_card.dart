@@ -12,7 +12,7 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
-  String urlImage = "https://picsum.photos/200";
+  String urlImage = "$BASE_URL/static/imgProducts/";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +26,8 @@ class _ProductCardState extends State<ProductCard> {
         children: [
           ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image(image: NetworkImage(urlImage))),
+              child:
+                  Image(image: NetworkImage(urlImage + widget.product.image))),
           Padding(
             padding: const EdgeInsets.all(5),
             child: Text(

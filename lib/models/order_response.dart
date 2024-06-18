@@ -13,7 +13,8 @@ class OrderResponse {
   });
 
   factory OrderResponse.fromJson(Map<String, dynamic> json) => OrderResponse(
-        orders: List<ROrder>.from(json["orders"].map((x) => ROrder.fromJson(x))),
+        orders:
+            List<ROrder>.from(json["orders"].map((x) => ROrder.fromJson(x))),
       );
 
   get value => null;

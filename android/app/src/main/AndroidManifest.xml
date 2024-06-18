@@ -31,8 +31,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
-                    android:scheme="http"
-                    android:host="10.0.2.2:5000" />
+                    
+                    android:scheme="myapp"
+                    android:host="tumercado.app" />
             </intent-filter> 
 
         </activity>

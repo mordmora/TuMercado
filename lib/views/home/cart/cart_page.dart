@@ -162,7 +162,7 @@ class _CartPageState extends State<CartPage> with RouteAware {
                                   style: TextStyles.subtitle,
                                 ),
                                 Text(
-                                  "Precio: ${getFormatMoneyString(order.price.toDouble())}\$",
+                                  "Total: ${getFormatMoneyString(order.price * order.quantity)}\$",
                                   style: TextStyles.subtitle,
                                 ),
                               ],

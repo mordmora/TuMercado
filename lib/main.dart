@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void openAppLink(Uri uri) {
+    print("openAppLink: $uri");
     _navigatorKey.currentState?.pushNamed(uri.path);
   }
 
@@ -71,7 +72,6 @@ class _MyAppState extends State<MyApp> {
           ),
           child: MaterialApp(
             navigatorKey: _navigatorKey,
-            navigatorObservers: [routeObserver],
             title: 'Tu Mercado',
             debugShowCheckedModeBanner: false,
             initialRoute: '/',

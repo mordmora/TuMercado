@@ -45,7 +45,7 @@ class _OrderConfirmState extends State<OrderConfirm> {
   Future<void> _launchMercadoPagoURL() async {
     String url = widget.args.link;
     launchUrl(Uri.parse(url),
-        customTabsOptions: CustomTabsOptions(
+        customTabsOptions: const CustomTabsOptions(
           shareState: CustomTabsShareState.on,
         ));
   }

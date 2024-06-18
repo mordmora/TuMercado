@@ -6,7 +6,7 @@ class Product {
   final int stock;
   final String createAt;
   final String updateAt;
-  final image;
+  final String image;
 
   Product({
     required this.image,

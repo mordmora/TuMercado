@@ -1,6 +1,6 @@
 class ProductOrder {
   final String name;
-  final double quantity;
+  final int quantity;
   final double price;
   final String description;
   final String id;

@@ -16,6 +16,16 @@ import 'package:tu_mercado/views/login/recovery.dart';
 import 'package:tu_mercado/views/login/recovery_code.dart';
 import 'package:tu_mercado/views/register/register.dart';
 
+/*
+  TODO:
+  1: Corregir errores de calculo con el precio total de prodcutos en la pagina de carrito
+  2: Corregir errores de calculo en la sección de detalles de pedidos
+  3: Corregir errores de calculo de precios en las tarjetas de pedidos 
+  4: Terminar la sección de cambio de contraseñas
+  5: Validar el estado de pago de los pedidos
+  6: Validar el estado de entrega del pedido 
+*/
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -39,9 +49,9 @@ class RouteGenerator {
       //  return MaterialPageRoute(builder: (context) => const ChangePassword());
       case '/user/create_order':
         return MaterialPageRoute(builder: (context) => const CreateOrder());
-      case '/payment/success/app':
+      case '/payment/success':
         return MaterialPageRoute(builder: (context) => const PaymentSucess());
-      case '/payment/failed/app':
+      case '/payment/failed':
         return MaterialPageRoute(builder: (context) => const PaymentFailure());
       case '/alert':
         return MaterialPageRoute(builder: (context) => const Alert());

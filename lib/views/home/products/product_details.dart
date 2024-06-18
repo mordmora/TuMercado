@@ -18,7 +18,7 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  String imagePath = "https://picsum.photos/400";
+  String imagePath = BASE_URL + "/static/imgProducts/";
   TextEditingController quantityController = TextEditingController();
   int quantity = 1;
   bool isValidQuantity = true;
@@ -92,7 +92,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image(
-                          image: NetworkImage(imagePath),
+                          image: NetworkImage(imagePath + widget.product.image),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -143,8 +143,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   description: widget.product.description,
                                   id: widget.product.id,
                                   name: widget.product.name,
-                                  quantity: quantity.toDouble(),
-                                  price: _newPrice,
+                                  quantity: quantity,
+                                  price: widget.product.price,
                                 ));
                                 saveToSharedPreferences();
 
