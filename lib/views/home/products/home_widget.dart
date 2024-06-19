@@ -27,7 +27,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   void initState() {
-    getSharedPreferences();
+    //getSharedPreferences();
     super.initState();
     fetchProducts = ProductProvider().fetchProducts();
   }

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tu_mercado/components/order_card.dart';
 import 'package:tu_mercado/models/order_response.dart';
 import 'package:tu_mercado/providers/order_provider.dart';
-import 'package:tu_mercado/utils.dart';
 
 class OrderProgress extends StatefulWidget {
   const OrderProgress({super.key});

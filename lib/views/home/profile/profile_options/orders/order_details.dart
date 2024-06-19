@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tu_mercado/components/row_info.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/order_response.dart';
+import 'package:tu_mercado/providers/order_provider.dart';
 import 'package:tu_mercado/utils.dart';
 import 'package:tu_mercado/views/home/profile/profile_options/orders/order_confirm.dart';
 
@@ -15,6 +17,14 @@ class OrderDetails extends StatefulWidget {
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
+  double getTotalPrice() {
+    double total = 0;
+    for (Products product in widget.order.products) {
+      total += product.price * product.amount;
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.order.link);
@@ -58,7 +68,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text("Total: ", style: TextStyles.subtitle),
-                  Text(getFormatMoneyString(widget.order.value),
+                  Text(getFormatMoneyString(getTotalPrice()),
                       style: TextStyles.subtitle),
                 ],
               ),
@@ -90,7 +100,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       onPressed: () {
                         Args args = Args(
                           link: widget.order.link,
-                          price: getFormatMoneyString(widget.order.value),
+                          price: getFormatMoneyString(getTotalPrice()),
                         );
                         Navigator.of(context).pushNamed(
                           '/order/confirm',
@@ -116,7 +126,61 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                         ),
                       ),
-                      onPressed: () {}),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Cancelar pedido",
+                                    style:
+                                        TextStyles.getTittleStyleWithSize(24)),
+                                content: const Text(
+                                  "¿Desea cancelar este pedido?",
+                                  style: TextStyles.normal,
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("Cancelar")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Provider.of<OrderProvider>(context,
+                                                listen: false)
+                                            .cancelOrder(widget.order.id)
+                                            .then((value) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                    "Cancelar pedido",
+                                                    style: TextStyles
+                                                        .getTittleStyleWithSize(
+                                                            24),
+                                                  ),
+                                                  content: Text(
+                                                    value,
+                                                    style: TextStyles.normal,
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () => Navigator
+                                                            .pushNamedAndRemoveUntil(
+                                                                context,
+                                                                '/home',
+                                                                (route) =>
+                                                                    false),
+                                                        child: Text("Ok"))
+                                                  ],
+                                                );
+                                              });
+                                        });
+                                      },
+                                      child: Text("Confirmar")),
+                                ],
+                              );
+                            });
+                      }),
                 ],
               ),
               const Expanded(child: SizedBox()),

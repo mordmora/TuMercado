@@ -37,7 +37,6 @@ class OrderProvider extends ChangeNotifier {
       return "Error exception $e";
     }
   }
- 
 
   Future<OrderResponse> getOrders() async {
     try {
@@ -58,6 +57,27 @@ class OrderProvider extends ChangeNotifier {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<String> cancelOrder(String orderId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String _token = prefs.getString("token") ?? "";
+      final Uri url = Uri.parse("$_baseUrl/user/cancelOrder/$orderId");
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $_token"
+      });
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)["message"];
+      } else {
+        String messageBody = jsonDecode(response.body)["message"];
+        return messageBody;
+      }
+    } catch (e) {
+      return "Error exception $e";
     }
   }
 }
