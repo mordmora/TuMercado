@@ -13,6 +13,7 @@ import 'package:tu_mercado/views/home/profile/profile_options/orders/my_orders.d
 import 'package:tu_mercado/views/login/login.dart';
 import 'package:tu_mercado/views/login/recovery.dart';
 import 'package:tu_mercado/views/login/recovery_code.dart';
+import 'package:tu_mercado/views/register/premium_offer.dart';
 import 'package:tu_mercado/views/register/register.dart';
 
 /*
@@ -56,6 +57,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const PaymentFailure());
       case '/alert':
         return MaterialPageRoute(builder: (context) => const Alert());
+      case '/premium_offer':
+        return MaterialPageRoute(
+            builder: (context) => PremiumOffer(
+                  onPressed: settings.arguments as void Function(),
+                ));
       case '/order/details':
         return MaterialPageRoute(
             builder: (context) =>

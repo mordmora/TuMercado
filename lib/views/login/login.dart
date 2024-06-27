@@ -147,12 +147,12 @@ class _LoginState extends State<Login> {
                         width: width,
                         height: height * 0.07,
                         onTap: () {
-                          print("login pressed");
                           authProvider
                               .login(_email, _password)
                               .then((value) => {
-                                    print(value),
-                                    if (value.contains("incorrectos"))
+                                    if (value.contains("incorrectos") ||
+                                        value ==
+                                            "No se ha podido conectar con el servidor, por favor revisa tu conexión a internet.")
                                       {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(

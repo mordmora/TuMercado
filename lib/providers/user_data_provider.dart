@@ -38,4 +38,32 @@ class UserProvider extends ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<String> updateProfile(
+      String phone, String address, String neighborhood) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    try {
+      var response = await http.put(
+        Uri.parse('$_baseUrl/user/updateProfile'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'phone': phone,
+          'address': address,
+          'neighborhood': neighborhood,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['message'];
+      } else {
+        throw Exception('Error al actualizar el perfil');
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

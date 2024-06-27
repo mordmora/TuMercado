@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -182,12 +183,81 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
           ),
           child: ContactForm(
             onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        backgroundColor: Colors.transparent,
+                        contentPadding: EdgeInsets.zero,
+                        content: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text:
+                                      'Al registrarte estás aceptando nuestros ',
+                                  style: TextStyles.normal
+                                      .copyWith(color: Colors.black),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'términos y condiciones',
+                                      style: const TextStyle(
+                                          color: Palette.greenDark,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Outfit',
+                                          decoration: TextDecoration.underline),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {},
+                                    ),
+                                    const TextSpan(
+                                      text: '.',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ActionsButtons(
+                                    text: "Aceptar",
+                                  ),
+                                  ActionsButtons(
+                                    text: "Cancelar",
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ));
               if (_date == "" || _phone == "" || _adress == "") {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text("Completa todos los campos"),
                   ),
                 );
+              } else if (_passwordController.text !=
+                  _confirmPasswordController.text) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Las contraseñas no coinciden"),
+                ));
+              } else if (!_emailController.text.contains("@")) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Email invalido"),
+                ));
+              } else if (_passwordController.text.length < 6) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text(
+                        "La contraseña debe tener al menos 6 caracteres")));
               } else {
                 User user = User(_name, _lastName, _date, _phone, _adress);
                 Provider.of<AuthProvider>(context, listen: false)
@@ -269,5 +339,29 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
                 const Flexible(child: SizedBox.shrink())
               ]),
         ));
+  }
+}
+
+class ActionsButtons extends StatelessWidget {
+  final String text;
+  const ActionsButtons({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        style: const ButtonStyle(
+          padding:
+              MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 30)),
+          backgroundColor: MaterialStatePropertyAll(Colors.black),
+          foregroundColor: MaterialStatePropertyAll(Colors.white),
+          overlayColor: MaterialStatePropertyAll(
+            Colors.transparent,
+          ),
+        ),
+        onPressed: () {},
+        child: Text(text));
   }
 }

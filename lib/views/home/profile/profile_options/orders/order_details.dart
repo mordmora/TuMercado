@@ -73,116 +73,122 @@ class _OrderDetailsState extends State<OrderDetails> {
                 ],
               ),
               const Expanded(child: SizedBox()),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      child: Container(
-                        width: 170,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black,
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Confirmar pedido",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Outfit',
-                                fontSize: 18),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        Args args = Args(
-                          link: widget.order.link,
-                          price: getFormatMoneyString(getTotalPrice()),
-                        );
-                        Navigator.of(context).pushNamed(
-                          '/order/confirm',
-                          arguments: args,
-                        );
-                      }),
-                  CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      child: Container(
-                        width: 170,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black,
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Cancelar pedido",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Outfit',
-                                fontSize: 18),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text("Cancelar pedido",
-                                    style:
-                                        TextStyles.getTittleStyleWithSize(24)),
-                                content: const Text(
-                                  "¿Desea cancelar este pedido?",
-                                  style: TextStyles.normal,
+              widget.order.payment
+                  ? const SizedBox()
+                  : Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              width: 170,
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.black,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Confirmar pedido",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Outfit',
+                                      fontSize: 18),
                                 ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text("Cancelar")),
-                                  TextButton(
-                                      onPressed: () {
-                                        Provider.of<OrderProvider>(context,
-                                                listen: false)
-                                            .cancelOrder(widget.order.id)
-                                            .then((value) {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                    "Cancelar pedido",
-                                                    style: TextStyles
-                                                        .getTittleStyleWithSize(
-                                                            24),
-                                                  ),
-                                                  content: Text(
-                                                    value,
-                                                    style: TextStyles.normal,
-                                                  ),
-                                                  actions: [
-                                                    TextButton(
-                                                        onPressed: () => Navigator
-                                                            .pushNamedAndRemoveUntil(
-                                                                context,
-                                                                '/home',
-                                                                (route) =>
-                                                                    false),
-                                                        child: Text("Ok"))
-                                                  ],
-                                                );
-                                              });
-                                        });
-                                      },
-                                      child: Text("Confirmar")),
-                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              Args args = Args(
+                                link: widget.order.link,
+                                price: getFormatMoneyString(getTotalPrice()),
                               );
-                            });
-                      }),
-                ],
-              ),
+                              Navigator.of(context).pushNamed(
+                                '/order/confirm',
+                                arguments: args,
+                              );
+                            }),
+                        CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              width: 170,
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.black,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Cancelar pedido",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Outfit',
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("Cancelar pedido",
+                                          style:
+                                              TextStyles.getTittleStyleWithSize(
+                                                  24)),
+                                      content: const Text(
+                                        "¿Desea cancelar este pedido?",
+                                        style: TextStyles.normal,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text("Cancelar")),
+                                        TextButton(
+                                            onPressed: () {
+                                              Provider.of<OrderProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .cancelOrder(widget.order.id)
+                                                  .then((value) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                          "Cancelar pedido",
+                                                          style: TextStyles
+                                                              .getTittleStyleWithSize(
+                                                                  24),
+                                                        ),
+                                                        content: Text(
+                                                          value,
+                                                          style:
+                                                              TextStyles.normal,
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () => Navigator
+                                                                  .pushNamedAndRemoveUntil(
+                                                                      context,
+                                                                      '/home',
+                                                                      (route) =>
+                                                                          false),
+                                                              child: Text("Ok"))
+                                                        ],
+                                                      );
+                                                    });
+                                              });
+                                            },
+                                            child: Text("Confirmar")),
+                                      ],
+                                    );
+                                  });
+                            }),
+                      ],
+                    ),
               const Expanded(child: SizedBox()),
             ],
           ),

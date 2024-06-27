@@ -29,7 +29,8 @@ class _ActionCardState extends State<ActionCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(widget.label, style: TextStyles.subtitle),
-            IconButton(onPressed: widget.onTap, icon: Icon(widget.icon))
+            IconButton(
+                onPressed: widget.onTap, icon: Icon(widget.icon, size: 30)),
           ],
         ),
       )

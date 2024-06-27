@@ -31,20 +31,3 @@ class MercadoPagoResponse {
     return data;
   }
 }
-  Future<void> saveOrderToSharedPreferences() async {
-    var createdOrders;
-    List<String> saveOrder =
-        createdOrders.map((order) => jsonEncode(order.toJson())).toList();
-    var prefs;
-    prefs.setStringList('createdOrders', saveOrder);
-  }
-
-    Future<void> readCreatedOrders() async {
-    var prefs;
-    List<String>? orders = prefs.getStringList('createdOrders');
-    if (orders != null) {
-      var createdOrders = orders.map((order) {
-        return MercadoPagoResponse.fromJson(jsonDecode(order));
-      }).toList();
-    }
-  }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
@@ -56,7 +57,7 @@ class OrderCard extends StatelessWidget {
           height: height * heightRatio,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Palette.green,
+            color: order.status == "Cancelado" ? Colors.grey : Palette.green,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,10 +129,12 @@ class OrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   DetailButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/order/details",
-                          arguments: order);
-                    },
+                    onPressed: order.status == "Cancelado"
+                        ? null
+                        : () {
+                            Navigator.pushNamed(context, "/order/details",
+                                arguments: order);
+                          },
                   ),
                   Text(order.status,
                       style: TextStyle(
@@ -153,7 +156,7 @@ class OrderCard extends StatelessWidget {
 }
 
 class DetailButton extends StatelessWidget {
-  final void Function() onPressed;
+  final void Function()? onPressed;
   const DetailButton({
     required this.onPressed,
     super.key,
@@ -161,12 +164,19 @@ class DetailButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return CupertinoButton(
+      disabledColor: Colors.grey,
+      padding: EdgeInsets.zero,
       onPressed: onPressed,
-      child: const Text("Detalles", style: TextStyles.normal),
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.black),
-          foregroundColor: MaterialStateProperty.all(Colors.white)),
+      child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text("Detalles",
+              style: TextStyle(
+                  color: Colors.white, fontFamily: 'Outfit', fontSize: 18))),
     );
   }
 }

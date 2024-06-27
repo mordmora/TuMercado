@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
+import 'package:tu_mercado/controllers/notification_controller.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
 import 'package:tu_mercado/views/home/cart/cart_page.dart';
 import 'package:tu_mercado/views/home/profile/profile_page.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'products/home_widget.dart';
 
@@ -36,6 +40,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    _timer = Timer.periodic(Duration(minutes: 3), (timer) {
+      getSharedPreferences();
+    });
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayedMethod);
+    initializeSocket();
     getSharedPreferences();
     super.initState();
     _pageController = PageController();
@@ -44,7 +60,43 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _pageController.dispose();
+    AwesomeNotifications().dispose();
+    socket.dispose();
     super.dispose();
+    _timer.cancel();
+  }
+
+  void showNotification(dynamic data) {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: 10,
+          channelKey: 'basic_channel',
+          title: 'New Message',
+          body: data),
+    );
+  }
+
+  late IO.Socket socket;
+  late Timer _timer;
+
+  void initializeSocket() {
+    // Reemplaza con tu URL de servidor de Socket.IO
+    socket = IO.io('ws://10.0.2.2:5000', <String, dynamic>{
+      'transports': ['websocket'],
+    });
+
+    socket.on('connect', (_) {
+      print('connect');
+    });
+
+    socket.on('mensaje_desde_servidor', (data) {
+      showNotification(data);
+    });
+
+    socket.on('disconnect', (_) {
+      print('disconnect');
+    });
+    print(socket.connected);
   }
 
   Future<void> getSharedPreferences() async {
@@ -79,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 _pageController.animateToPage(value,
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut);
-                getSharedPreferences();
               }),
               items: const [
                 BottomNavigationBarItem(
@@ -107,7 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _pageController,
               onPageChanged: (value) {
                 setState(() {
-                  getSharedPreferences();
                   _index = value;
                 });
               },

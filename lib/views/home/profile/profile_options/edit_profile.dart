@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tu_mercado/components/edit_attribute.dart';
 import 'package:tu_mercado/config/styles.dart';
@@ -35,6 +37,14 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   @override
+  void dispose() {
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -50,6 +60,9 @@ class _EditProfileState extends State<EditProfile> {
           padding: const EdgeInsets.all(16.0),
           child: Consumer<UserProvider>(
             builder: (BuildContext context, UserProvider value, Widget? child) {
+              _phoneController.text = value.userData.phone;
+              _addressController.text = value.userData.address;
+
               UserData userData = value.userData;
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,12 +78,24 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     const SizedBox(height: 20),
                     EditAttribute(
-                        label: userData.phone, controller: _phoneController),
+                        formatter: [FilteringTextInputFormatter.digitsOnly],
+                        keyboardType: TextInputType.number,
+                        label: userData.phone,
+                        controller: _phoneController),
                     const SizedBox(height: 20),
                     EditAttribute(
+                        editable: true,
                         label: userData.address,
                         controller: _addressController),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Recuerda que por el momento solo funcionamos en Santa Marta.",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: 'Outfit',
+                      ),
+                    ),
                     SizedBox(
                       width: 300,
                       child: TextButton(
@@ -88,11 +113,59 @@ class _EditProfileState extends State<EditProfile> {
                                 textAlign: TextAlign.start),
                           )),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Center(
-                      child: FloatingActionButton(
-                          onPressed: () {}, child: Icon(Icons.save)),
-                    ),
+                        child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .updateProfile(_phone, _address, _password)
+                                  .then((value) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          content: Text("Cuenta actualizada"),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator
+                                                      .pushNamedAndRemoveUntil(
+                                                          context,
+                                                          "/home",
+                                                          (route) => false);
+                                                },
+                                                child: const Text("Ok"))
+                                          ],
+                                        ));
+                              }).onError((error, stackTrace) => showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            content: Text(error.toString()),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text("Ok"))
+                                            ],
+                                          )));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              width: 300,
+                              height: 50,
+                              child: const Text("Guardar cambios",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontFamily: 'Outfit',
+                                  ),
+                                  textAlign: TextAlign.center),
+                            ))),
                   ]);
             },
           ),

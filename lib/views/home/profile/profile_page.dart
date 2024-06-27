@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/components/action_card.dart';
 import 'package:tu_mercado/components/row_info.dart';
 import 'package:tu_mercado/models/user_data.dart';
 import 'package:tu_mercado/providers/user_data_provider.dart';
+import 'package:tu_mercado/utils.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -31,6 +33,13 @@ class _ProfilePageState extends State<ProfilePage> {
   void getSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {});
+  }
+
+  Future<void> openWhatsappSupportLink() async {
+    launchUrl(Uri.parse(WHATSAPP_URL),
+        customTabsOptions: const CustomTabsOptions(
+          shareState: CustomTabsShareState.on,
+        ));
   }
 
   @override
@@ -84,7 +93,18 @@ class _ProfilePageState extends State<ProfilePage> {
                           ActionCard(
                               label: "Comunicate con soporte",
                               icon: Icons.help,
-                              onTap: () {}),
+                              onTap: () {
+                                openWhatsappSupportLink();
+                              }),
+                          ActionCard(
+                              label: "Actualizar plan",
+                              icon: Icons.data_exploration_rounded,
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed('/premium_offer', arguments: () {
+                                  Navigator.pop(context);
+                                });
+                              }),
                           ActionCard(
                             label: "Cerrar sesión",
                             icon: Icons.logout,

@@ -1,11 +1,15 @@
 // ignore: non_constant_identifier_names
 // ignore_for_file: unused_element
-
 // ignore: non_constant_identifier_names
-
+import 'dart:async';
+import 'dart:io';
 import 'package:intl/intl.dart';
 
-String BASE_URL = "http://10.0.2.2:5000";
+
+String BASE_IP = "http://10.0.2.2";
+String BASE_PORT = ":5000";
+String BASE_URL = "$BASE_IP$BASE_PORT";
+String WHATSAPP_URL = "https://wa.me/51999999999";
 
 String getFormatMoneyString(double num) {
   String numero = num.toString();

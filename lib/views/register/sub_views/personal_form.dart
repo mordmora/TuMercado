@@ -34,14 +34,22 @@ class _PersonalFormState extends State<PersonalForm> {
         children: [
           const Text("Primer Nombre", style: TextStyles.subtitle),
           CustomTextField(
-            formatter: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))],
+            formatter: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+              FilteringTextInputFormatter.deny(RegExp(r"\s")),
+              LengthLimitingTextInputFormatter(10),
+            ],
             isPassword: false,
             controller: widget.nameController,
           ),
           const SizedBox(height: 20),
           const Text("Primer Apellido", style: TextStyles.subtitle),
           CustomTextField(
-            formatter: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))],
+            formatter: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+              FilteringTextInputFormatter.deny(RegExp(r"\s")),
+              LengthLimitingTextInputFormatter(10),
+            ],
             isPassword: false,
             controller: widget.lastNameController,
           ),
