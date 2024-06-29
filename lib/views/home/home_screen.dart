@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(Duration(minutes: 3), (timer) {
+    _timer = Timer.periodic(Duration(hours: 1), (timer) {
       getSharedPreferences();
     });
     AwesomeNotifications().setListeners(

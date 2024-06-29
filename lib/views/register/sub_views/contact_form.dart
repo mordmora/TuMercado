@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:tu_mercado/components/text_field.dart';
 import 'package:tu_mercado/config/styles.dart';
+import 'package:tu_mercado/models/neighborhood.dart';
+import 'package:tu_mercado/providers/auth_provider.dart';
 
 class ContactForm extends StatefulWidget {
   final TextEditingController numberController;
@@ -23,6 +26,43 @@ class ContactForm extends StatefulWidget {
 
 class _ContactFormState extends State<ContactForm> {
   bool hasSelectedNeighborhood = false;
+  List<DropdownMenuItem<dynamic>>? items = [];
+  List<Neighborhood>? neighborhoods = [];
+  String neighborhoodName = "";
+  String price = "";
+
+  @override
+  void initState() {
+    _loadNeighborhoods();
+    super.initState();
+  }
+
+  void _loadNeighborhoods() async {
+    neighborhoods = await Provider.of<AuthProvider>(context, listen: false)
+        .getNeighborhoods();
+    setState(() {
+      items = neighborhoods?.map((neighborhood) {
+        return DropdownMenuItem<String>(
+          value: neighborhood.name,
+          child: Text(neighborhood.name),
+        );
+      }).toList();
+    });
+  }
+
+  String getNeighborhoodPrice(String current) {
+    for (var neighborhood in neighborhoods!) {
+      if (neighborhood.name == current) {
+        return neighborhood.price.toString();
+      }
+    }
+    return "";
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,22 +96,12 @@ class _ContactFormState extends State<ContactForm> {
               )),
           style: TextStyle(
               color: Colors.black, fontFamily: 'Outfit', fontSize: 16),
-          items: const [
-            DropdownMenuItem(
-              value: "Casa",
-              child: Text("Casa"),
-            ),
-            DropdownMenuItem(
-              value: "Oficina",
-              child: Text("Oficina"),
-            ),
-            DropdownMenuItem(
-              value: "Trabajo",
-              child: Text("Trabajo"),
-            ),
-          ],
+          items: items,
           onChanged: (value) {
             setState(() {
+              print(value);
+              neighborhoodName = value.toString();
+              price = getNeighborhoodPrice(neighborhoodName);
               hasSelectedNeighborhood = true;
             });
           }),
@@ -84,7 +114,8 @@ class _ContactFormState extends State<ContactForm> {
         controller: widget.adressController,
       ),
       hasSelectedNeighborhood
-          ? Text("En el barrio X el domicilio te cuesta: Y",
+          ? Text(
+              "En el barrio ${neighborhoodName} el domicilio te cuesta: ${price}",
               style: TextStyles.normal)
           : const SizedBox(),
       Expanded(

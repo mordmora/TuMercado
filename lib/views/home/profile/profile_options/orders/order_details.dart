@@ -28,6 +28,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   @override
   Widget build(BuildContext context) {
     print(widget.order.link);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detalles del pedido", style: TextStyles.title),

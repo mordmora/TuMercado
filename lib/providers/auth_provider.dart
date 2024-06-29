@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:tu_mercado/models/User.dart';
+import 'package:tu_mercado/models/neighborhood.dart';
 import 'package:tu_mercado/utils.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -80,6 +81,23 @@ class AuthProvider extends ChangeNotifier {
       }
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future<List<Neighborhood>> getNeighborhoods() async {
+    try {
+      final Uri url = Uri.parse("$baseUrl/admin/getAllNeighborshood");
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        print(response.body);
+        return neighborhoodFromJson(response.body);
+      } else {
+        print(response.body);
+        return [];
+      }
+    } catch (e) {
+      print(e);
+      return [];
     }
   }
 }

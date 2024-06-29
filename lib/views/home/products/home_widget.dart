@@ -32,6 +32,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     fetchProducts = ProductProvider().fetchProducts();
   }
 
+/*
   Future<void> getSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
     _email = prefs.getString("email") ?? "";
@@ -43,7 +44,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       setState(() {});
     });
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
