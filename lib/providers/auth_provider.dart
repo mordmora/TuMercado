@@ -11,11 +11,18 @@ class AuthProvider extends ChangeNotifier {
   bool isAuthenticated = false;
   final Uri baseUrl = Uri.parse(BASE_URL);
   bool _rememberMe = false;
+  String neighborhood = "";
   final connection = InternetConnection.createInstance(customCheckOptions: [
     InternetCheckOption(
       uri: Uri.parse(BASE_URL),
     ),
   ]);
+
+  set setNeighborhood(String value) {
+    neighborhood = value;
+    print("Barrio: " + neighborhood);
+    notifyListeners();
+  }
 
   get remembermeValue => _rememberMe;
   set remembermeValue(value) {
@@ -25,9 +32,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<String> login(String email, String password) async {
     bool hasInternetConnection = await connection.hasInternetAccess;
-    print(hasInternetConnection);
     if (!hasInternetConnection) {
-      print("No internet access");
       return "No se ha podido conectar con el servidor, por favor revisa tu conexión a internet.";
     }
     try {
@@ -44,7 +49,6 @@ class AuthProvider extends ChangeNotifier {
         return token;
       } else {
         String messageBody = jsonDecode(response.body)["message"];
-        print(messageBody);
         return messageBody;
       }
     } catch (e) {
@@ -68,6 +72,7 @@ class AuthProvider extends ChangeNotifier {
         "lastName": user.lastName,
         "birthDate": user.date,
         "phone": user.phone,
+        "neighbordhood": neighborhood,
         "address": user.adress
       };
       final response = await http.post(url,
@@ -89,14 +94,11 @@ class AuthProvider extends ChangeNotifier {
       final Uri url = Uri.parse("$baseUrl/admin/getAllNeighborshood");
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        print(response.body);
         return neighborhoodFromJson(response.body);
       } else {
-        print(response.body);
         return [];
       }
     } catch (e) {
-      print(e);
       return [];
     }
   }

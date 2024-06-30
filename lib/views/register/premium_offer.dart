@@ -1,13 +1,86 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
+import 'package:tu_mercado/providers/order_provider.dart';
 
 class PremiumOffer extends StatelessWidget {
   final void Function() onPressed;
   const PremiumOffer({super.key, required this.onPressed});
+
+  void _openMercadoPago(BuildContext ctx) {
+    String link = "";
+    Provider.of<OrderProvider>(ctx, listen: false)
+        .getMembershipLink()
+        .then((value) {
+      link = value;
+    }).whenComplete(() {
+      launchUrl(Uri.parse(link),
+          customTabsOptions: CustomTabsOptions(
+            shareState: CustomTabsShareState.on,
+          ));
+    });
+  }
+
+  Widget _confirmationDialog(BuildContext ctx) {
+    return AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.zero,
+        content: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "¿Estas seguro de actualizar tu membresía?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black, fontFamily: 'Outfit', fontSize: 16),
+              ),
+              const SizedBox(height: 20),
+              Row(children: [
+                Expanded(
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    color: Palette.greenDark,
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                    child: const Text("Cancelar",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Outfit',
+                            fontSize: 16)),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    color: Palette.greenDark,
+                    onPressed: () {
+                      _openMercadoPago(ctx);
+                    },
+                    child: const Text("Confirmar",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Outfit',
+                            fontSize: 16)),
+                  ),
+                ),
+              ])
+            ],
+          ),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +129,11 @@ class PremiumOffer extends StatelessWidget {
                   child: Text("Actualizar membresía",
                       style: TextStyles.subtitle.copyWith(color: Colors.white)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => _confirmationDialog(context));
+                },
               ),
               Stack(
                 children: [

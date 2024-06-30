@@ -1,20 +1,23 @@
-
 class UserData {
   final String id;
   final String firstName;
   final String lastName;
   final String email;
   final String phone;
+  final bool membership;
   final String address;
   final String birthDate;
   final String createAt;
+  final String neighbordhood;
   final String updateAt;
 
   UserData({
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.membership,
     required this.email,
+    required this.neighbordhood,
     required this.phone,
     required this.address,
     required this.birthDate,
@@ -29,6 +32,8 @@ class UserData {
       firstName: json['firstName'],
       lastName: json['lastName'],
       email: json['email'],
+      neighbordhood: json['neighbordhood'],
+      membership: json['membership'],
       phone: json['phone'],
       address: json['address'],
       birthDate: json['birthDate'],
@@ -43,6 +48,8 @@ class UserData {
       'id': id,
       'firstName': firstName,
       'lastName': lastName,
+      'membership': membership,
+      'neighbordhood': neighbordhood,
       'email': email,
       'phone': phone,
       'address': address,

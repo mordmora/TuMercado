@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/order_response.dart';
@@ -30,13 +31,28 @@ class OrderCard extends StatelessWidget {
 
   double getHeightRatio(double x) {
     if (x > 900)
-      return 0.20;
+      return 0.24;
     else if (x > 710)
-      return 0.23;
-    else if (x > 650)
-      return 0.25;
-    else
       return 0.27;
+    else if (x > 650)
+      return 0.29;
+    else
+      return 0.31;
+  }
+
+  Color getColorsByStatus(String status) {
+    if (status == "Pendiente")
+      return Colors.yellow.shade300;
+    else if (status == "Recogiendo tus productos")
+      return Colors.orange.shade300;
+    else if (status == "Enviado")
+      return Colors.green;
+    else if (status == "Pedido entregado")
+      return Palette.green;
+    else if (status == "Cancelado")
+      return Colors.grey;
+    else
+      return Palette.green;
   }
 
   @override
@@ -57,7 +73,7 @@ class OrderCard extends StatelessWidget {
           height: height * heightRatio,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: order.status == "Cancelado" ? Colors.grey : Palette.green,
+            color: getColorsByStatus(order.status),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,8 +81,29 @@ class OrderCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("ID: #ORDER${order.id.substring(0, 5)}",
-                      style: TextStyles.getTittleStyleWithSize(18)),
+                  Row(
+                    children: [
+                      Text("ID: #ORDER${order.id.substring(0, 5)}",
+                          style: TextStyles.getTittleStyleWithSize(18)),
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Clipboard.setData(
+                              ClipboardData(text: order.id),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('ID copiado al portapapeles'),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.copy_outlined,
+                            size: 30,
+                            color: Colors.black,
+                          )),
+                    ],
+                  ),
                   Text(formatDate(order.createAt),
                       style: const TextStyle(
                           color: Colors.black,

@@ -103,6 +103,8 @@ class _ContactFormState extends State<ContactForm> {
               neighborhoodName = value.toString();
               price = getNeighborhoodPrice(neighborhoodName);
               hasSelectedNeighborhood = true;
+              Provider.of<AuthProvider>(context, listen: false)
+                  .setNeighborhood = neighborhoodName;
             });
           }),
       const SizedBox(height: 20),

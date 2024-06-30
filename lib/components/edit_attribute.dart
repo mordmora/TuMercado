@@ -7,9 +7,11 @@ class EditAttribute extends StatefulWidget {
   final String label;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? formatter;
+  final Widget? prefix;
   final bool? editable;
   const EditAttribute(
       {super.key,
+      this.prefix,
       required this.label,
       this.controller,
       this.editable,
@@ -34,6 +36,7 @@ class _EditAttributeState extends State<EditAttribute> {
       style: TextStyles.profileName,
       enabled: widget.editable ?? true,
       decoration: InputDecoration(
+        prefixIcon: widget.prefix,
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(color: Colors.black, width: 1.2),

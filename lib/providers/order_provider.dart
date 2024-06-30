@@ -80,4 +80,22 @@ class OrderProvider extends ChangeNotifier {
       return "Error exception $e";
     }
   }
+
+  Future<String> getMembershipLink() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      final Uri url = Uri.parse("$_baseUrl/user/shopMembership");
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs.getString("token")}"
+      });
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)["message"]["link"];
+      } else {
+        throw Exception("Error al cargar el link de membresia");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

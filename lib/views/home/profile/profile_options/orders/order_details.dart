@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tu_mercado/components/row_info.dart';
 import 'package:tu_mercado/config/styles.dart';
+import 'package:tu_mercado/models/neighborhood.dart';
 import 'package:tu_mercado/models/order_response.dart';
+import 'package:tu_mercado/models/user_data.dart';
 import 'package:tu_mercado/providers/order_provider.dart';
+import 'package:tu_mercado/providers/user_data_provider.dart';
 import 'package:tu_mercado/utils.dart';
 import 'package:tu_mercado/views/home/profile/profile_options/orders/order_confirm.dart';
 
@@ -23,6 +26,12 @@ class _OrderDetailsState extends State<OrderDetails> {
       total += product.price * product.amount;
     }
     return total;
+  }
+
+  double getDeliveryPrice() {
+    Neighborhood neighborhood =
+        Provider.of<UserProvider>(context, listen: false).userNeighborhoodData;
+    return neighborhood.price;
   }
 
   @override
@@ -63,13 +72,23 @@ class _OrderDetailsState extends State<OrderDetails> {
                 ),
               ),
               const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Domicilio: ", style: TextStyles.subtitle),
+                  Text(getFormatMoneyString(getDeliveryPrice()),
+                      style: TextStyles.subtitle),
+                ],
+              ),
               Container(color: Colors.black, height: 1),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text("Total: ", style: TextStyles.subtitle),
-                  Text(getFormatMoneyString(getTotalPrice()),
+                  Text(
+                      getFormatMoneyString(
+                          getTotalPrice() + getDeliveryPrice()),
                       style: TextStyles.subtitle),
                 ],
               ),
@@ -103,7 +122,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                             onPressed: () {
                               Args args = Args(
                                 link: widget.order.link,
-                                price: getFormatMoneyString(getTotalPrice()),
+                                price: getFormatMoneyString(
+                                    getTotalPrice() + getDeliveryPrice()),
                               );
                               Navigator.of(context).pushNamed(
                                 '/order/confirm',

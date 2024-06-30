@@ -204,7 +204,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
                     content: Text(
                         "La contraseña debe tener al menos 6 caracteres")));
               } else {
-                User user = User(_name, _lastName, _date, _phone, _adress);
+                User user = User(_name, _lastName, _date, _phone, _adress, "");
                 Provider.of<AuthProvider>(context, listen: false)
                     .register(user, _email, _password)
                     .then((value) {

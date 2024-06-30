@@ -23,6 +23,7 @@ class _EditProfileState extends State<EditProfile> {
   String _address = "";
   String _phone = "";
 
+  @override
   void initState() {
     _phoneController.addListener(() {
       _phone = _phoneController.text;
@@ -85,6 +86,19 @@ class _EditProfileState extends State<EditProfile> {
                     const SizedBox(height: 20),
                     EditAttribute(
                         editable: true,
+                        prefix: Container(
+                          width: 85,
+                          alignment: Alignment.center,
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            userData.neighbordhood,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontFamily: 'Outfit',
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
                         label: userData.address,
                         controller: _addressController),
                     const SizedBox(height: 10),
@@ -105,7 +119,9 @@ class _EditProfileState extends State<EditProfile> {
                             backgroundColor: Colors.transparent,
                             foregroundColor: Colors.black,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/recovery");
+                          },
                           child: const Align(
                             alignment: Alignment.centerLeft,
                             child: Text("Quieres cambiar tu contraseña?",
@@ -124,7 +140,9 @@ class _EditProfileState extends State<EditProfile> {
                                 showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                          content: Text("Cuenta actualizada"),
+                                          title: Text("Cuenta actualizada",
+                                              style: TextStyles
+                                                  .getTittleStyleWithSize(18)),
                                           actions: [
                                             TextButton(
                                                 onPressed: () {

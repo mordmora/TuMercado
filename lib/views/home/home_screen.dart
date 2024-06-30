@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             NotificationController.onNotificationCreatedMethod,
         onNotificationDisplayedMethod:
             NotificationController.onNotificationDisplayedMethod);
-    initializeSocket();
+
     getSharedPreferences();
     super.initState();
     _pageController = PageController();
@@ -66,13 +66,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _timer.cancel();
   }
 
-  void showNotification(dynamic data) {
+  void showNotification(dynamic data, String title) {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: 10,
           channelKey: 'basic_channel',
-          title: 'New Message',
-          body: data),
+          title: title,
+          body: data["message"]),
     );
   }
 
@@ -85,18 +85,38 @@ class _HomeScreenState extends State<HomeScreen> {
       'transports': ['websocket'],
     });
 
+    print("IDk");
+
+    // Conectarse al servidor
     socket.on('connect', (_) {
       print('connect');
     });
-
+    print("IDk");
+    // Manejar mensajes desde el servidor
     socket.on('mensaje_desde_servidor', (data) {
-      showNotification(data);
+      showNotification(data, "Tu Mercado");
     });
 
+    socket.on('register', (data) {
+      print(data);
+      showNotification(data, "Tu Mercado");
+    });
+
+    // Manejar desconexión
     socket.on('disconnect', (_) {
       print('disconnect');
     });
-    print(socket.connected);
+
+    //socket.on('new_order', (data) {
+    //  print(data);
+    //  showNotification(jsonDecode(data)["message"], "Notificacion");
+    //});
+  }
+
+  void registerDevice() {
+    socket.emit('register', {
+      'id': _token,
+    });
   }
 
   Future<void> getSharedPreferences() async {
@@ -109,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
           _isLoading = false,
           setState(() {
             print("Im here");
-          })
+          }),
+          initializeSocket()
         });
   }
 

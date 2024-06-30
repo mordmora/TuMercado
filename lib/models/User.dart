@@ -4,10 +4,11 @@
 
 class User {
   String name;
+  String neighborhood;
   String lastName;
   String date;
   String phone;
   String adress;
 
-  User(this.name, this.lastName, this.date, this.phone, this.adress);
+  User(this.name, this.lastName, this.date, this.phone, this.adress, this.neighborhood);
 }
