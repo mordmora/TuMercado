@@ -33,6 +33,7 @@ class ROrder {
   bool payment;
   List<Products> products;
   String status;
+  String timeRange;
   String updateAt;
   String userId;
   double value;
@@ -40,6 +41,7 @@ class ROrder {
   ROrder({
     required this.createAt,
     required this.deliveryId,
+    required this.timeRange,
     required this.details,
     required this.id,
     required this.link,
@@ -54,6 +56,7 @@ class ROrder {
   factory ROrder.fromJson(Map<String, dynamic> json) => ROrder(
         createAt: json["createAt"],
         deliveryId: json["deliveryId"],
+        timeRange: json["timeRange"],
         details: json["details"],
         id: json["id"],
         link: json["link"],
@@ -69,6 +72,7 @@ class ROrder {
   Map<String, dynamic> toJson() => {
         "createAt": createAt,
         "deliveryId": deliveryId,
+        "timeRange": timeRange,
         "details": details,
         "id": id,
         "link": link,

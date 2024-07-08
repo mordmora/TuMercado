@@ -221,75 +221,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
                   }
                 }).whenComplete(() {
                   if (_register_status) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                              backgroundColor: Colors.transparent,
-                              contentPadding: EdgeInsets.zero,
-                              content: Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    RichText(
-                                      text: TextSpan(
-                                        text:
-                                            'Al registrarte estás aceptando nuestros ',
-                                        style: TextStyles.normal
-                                            .copyWith(color: Colors.black),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: 'términos y condiciones',
-                                            style: const TextStyle(
-                                                color: Palette.greenDark,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Outfit',
-                                                decoration:
-                                                    TextDecoration.underline),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {},
-                                          ),
-                                          const TextSpan(
-                                            text: '.',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        ActionsButtons(
-                                          text: "Aceptar",
-                                          onPressed: () {
-                                            termsAccepted = true;
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                        ActionsButtons(
-                                          text: "Cancelar",
-                                          onPressed: () {
-                                            termsAccepted = false;
-                                            Navigator.pushNamedAndRemoveUntil(
-                                                context,
-                                                '/login',
-                                                (route) => false);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ));
+                    showConditionsTerms(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Registro completado"),
@@ -353,6 +285,78 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
                 const Flexible(child: SizedBox.shrink())
               ]),
         ));
+  }
+
+  Future<dynamic> showConditionsTerms(BuildContext context) {
+    return showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            backgroundColor: Colors.transparent,
+                            contentPadding: EdgeInsets.zero,
+                            content: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      text:
+                                          'Al registrarte estás aceptando nuestros ',
+                                      style: TextStyles.normal
+                                          .copyWith(color: Colors.black),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: 'términos y condiciones',
+                                          style: const TextStyle(
+                                              color: Palette.greenDark,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Outfit',
+                                              decoration:
+                                                  TextDecoration.underline),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {},
+                                        ),
+                                        const TextSpan(
+                                          text: '.',
+                                          style:
+                                              TextStyle(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      ActionsButtons(
+                                        text: "Aceptar",
+                                        onPressed: () {
+                                          termsAccepted = true;
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      ActionsButtons(
+                                        text: "Cancelar",
+                                        onPressed: () {
+                                          termsAccepted = false;
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              '/login',
+                                              (route) => false);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
   }
 }
 

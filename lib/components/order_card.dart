@@ -31,13 +31,13 @@ class OrderCard extends StatelessWidget {
 
   double getHeightRatio(double x) {
     if (x > 900)
-      return 0.24;
+      return 0.33;
     else if (x > 710)
-      return 0.27;
+      return 0.35;
     else if (x > 650)
-      return 0.29;
+      return 0.36;
     else
-      return 0.31;
+      return 0.40;
   }
 
   Color getColorsByStatus(String status) {
@@ -181,8 +181,18 @@ class OrderCard extends StatelessWidget {
                           fontFamily: 'Outfit',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          letterSpacing: -0.5))
+                          letterSpacing: -0.5)),
                 ],
+              ),
+              SizedBox(height: height * 0.01),
+              Container(
+                color: Colors.grey,
+                height: 1,
+              ),
+              SizedBox(height: height * 0.01),
+              Text(
+                "Tiempo estimado de entrega: ${order.timeRange}",
+                style: TextStyles.getTittleStyleWithSize(16),
               )
             ],
           ),
