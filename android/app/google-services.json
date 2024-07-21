@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "340657532958",
+    "project_id": "tumercado-ecc4c",
+    "storage_bucket": "tumercado-ecc4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340657532958:android:e8a2cb8f2af96515e1be0f",
+        "android_client_info": {
+          "package_name": "com.example.tu_mercado"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOrsg8lkrnkjboyifWZ3t9h2ecLt9N1cE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

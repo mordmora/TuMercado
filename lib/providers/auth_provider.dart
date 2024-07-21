@@ -30,13 +30,17 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> login(String email, String password) async {
+  Future<String> login(String email, String password, String deviceID) async {
     bool hasInternetConnection = await connection.hasInternetAccess;
     if (!hasInternetConnection) {
       return "No se ha podido conectar con el servidor, por favor revisa tu conexión a internet.";
     }
     try {
-      Map<String, String> data = {"email": email, "password": password};
+      Map<String, String> data = {
+        "email": email,
+        "password": password,
+        "token": deviceID
+      };
       String token = "";
       final Uri url = Uri.parse("$baseUrl/user/login");
       final response = await http.post(url,

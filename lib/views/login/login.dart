@@ -24,6 +24,7 @@ class _LoginState extends State<Login> {
   String _email = "";
   String _password = "";
   bool rememberMe = false;
+  String deviceID = "";
   
   //preferences block
   late SharedPreferences prefs;
@@ -51,6 +52,7 @@ class _LoginState extends State<Login> {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       rememberMe = prefs.getBool("rememberMe") ?? false;
+      deviceID = prefs.getString("deviceID") ?? "";
     });
   }
 
@@ -147,8 +149,9 @@ class _LoginState extends State<Login> {
                         width: width,
                         height: height * 0.07,
                         onTap: () {
+                          print("deviceID: $deviceID");
                           authProvider
-                              .login(_email, _password)
+                              .login(_email, _password, deviceID)
                               .then((value) => {
                                     if (value.contains("incorrectos") ||
                                         value ==

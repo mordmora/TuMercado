@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:intl/intl.dart';
 
-String BASE_IP = "http://192.168.123.201";
+String BASE_IP = "http://10.0.2.2";
 String BASE_PORT = ":5000";
 String BASE_URL = "$BASE_IP$BASE_PORT";
 String WHATSAPP_URL = "https://wa.me/51999999999";

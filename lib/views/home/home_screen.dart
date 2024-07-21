@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
-import 'package:tu_mercado/controllers/notification_controller.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
 import 'package:tu_mercado/views/home/cart/cart_page.dart';
 import 'package:tu_mercado/views/home/profile/profile_page.dart';
@@ -26,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _email = "";
   String _password = "";
   String _token = "";
+  String _deviceID = "";
 
   late SharedPreferences prefs;
 
@@ -40,17 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(Duration(hours: 1), (timer) {
+    _timer = Timer.periodic(const Duration(hours: 1), (timer) {
       getSharedPreferences();
     });
-    AwesomeNotifications().setListeners(
-        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
-        onDismissActionReceivedMethod:
-            NotificationController.onDismissActionReceivedMethod,
-        onNotificationCreatedMethod:
-            NotificationController.onNotificationCreatedMethod,
-        onNotificationDisplayedMethod:
-            NotificationController.onNotificationDisplayedMethod);
 
     getSharedPreferences();
     super.initState();
@@ -60,77 +49,25 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _pageController.dispose();
-    AwesomeNotifications().dispose();
-    socket.dispose();
-    super.dispose();
     _timer.cancel();
-  }
-
-  void showNotification(dynamic data, String title) {
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: 10,
-          channelKey: 'basic_channel',
-          title: title,
-          body: data["message"]),
-    );
+    super.dispose();
   }
 
   late IO.Socket socket;
   late Timer _timer;
 
-  void initializeSocket() {
-    // Reemplaza con tu URL de servidor de Socket.IO
-    socket = IO.io('ws://10.0.2.2:5000', <String, dynamic>{
-      'transports': ['websocket'],
-    });
-
-    print("IDk");
-
-    // Conectarse al servidor
-    socket.on('connect', (_) {
-      print('connect');
-    });
-    print("IDk");
-    // Manejar mensajes desde el servidor
-    socket.on('mensaje_desde_servidor', (data) {
-      showNotification(data, "Tu Mercado");
-    });
-
-    socket.on('register', (data) {
-      print(data);
-      showNotification(data, "Tu Mercado");
-    });
-
-    // Manejar desconexión
-    socket.on('disconnect', (_) {
-      print('disconnect');
-    });
-
-    //socket.on('new_order', (data) {
-    //  print(data);
-    //  showNotification(jsonDecode(data)["message"], "Notificacion");
-    //});
-  }
-
-  void registerDevice() {
-    socket.emit('register', {
-      'id': _token,
-    });
-  }
-
   Future<void> getSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
     _email = prefs.getString("email") ?? "";
     _password = prefs.getString("password") ?? "";
-    AuthProvider().login(_email, _password).then((value) => {
+    _deviceID = prefs.getString("deviceID") ?? "";
+    AuthProvider().login(_email, _password, _deviceID).then((value) => {
           _token = value,
           prefs.setString("token", value),
           _isLoading = false,
           setState(() {
             print("Im here");
           }),
-          initializeSocket()
         });
   }
 

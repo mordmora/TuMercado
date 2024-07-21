@@ -1,40 +1,48 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tu_mercado/config/route_managment.dart';
+import 'package:tu_mercado/firebase_options.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
 import 'package:tu_mercado/providers/order_provider.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
 import 'package:tu_mercado/providers/user_data_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 Future<void> main() async {
-  
   WidgetsFlutterBinding.ensureInitialized();
-  await AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-      channelKey: 'basic_channel',
-      channelName: 'Basic notifications',
-      channelDescription: 'Notification channel for basic tests',
-      defaultColor: const Color.fromARGB(255, 255, 0, 0),
-    )
-  ], channelGroups: [
-    NotificationChannelGroup(
-      channelGroupKey: 'basic_channel_group',
-      channelGroupName: 'Basic group',
-    ),
-  ]);
 
-  bool idAllowdNotifications =
-      await AwesomeNotifications().isNotificationAllowed();
-  if (!idAllowdNotifications) {
-    idAllowdNotifications =
-        await AwesomeNotifications().requestPermissionToSendNotifications();
-  }
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //await PushNotificationService.initialiseApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  messaging.requestPermission();
+  String token = "";
+  messaging.getToken().then((value) {
+    token = value!;
+    prefs.setString("deviceID", token);
+
+  });
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+    print('Message notification: ${message.notification?.title}');
+    print('Message notification: ${message.notification?.body}');
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('A new onMessageOpenedApp event was published!');
+    print('Message data: ${message.data}');
+  });
+
   runApp(const MyApp());
 }
 
