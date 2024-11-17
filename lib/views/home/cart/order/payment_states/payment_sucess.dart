@@ -27,6 +27,7 @@ class _PaymentSucessState extends State<PaymentSucess> {
     });
   }
 
+  // ignore: non_constant_identifier_names
   bool unauthorized_access_attempt() {
     return _password == "" || _email == "";
   }
@@ -66,8 +67,6 @@ class _PaymentSucessState extends State<PaymentSucess> {
 
   @override
   Widget build(BuildContext context) {
-    print(_password);
-    print(_email);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(

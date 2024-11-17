@@ -26,7 +26,7 @@ class _AlertState extends State<Alert> {
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/', (route) => false);
               },
-              child: Text("Volver"))
+              child: const Text("Volver"))
         ],
       )),
     ));

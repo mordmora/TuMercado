@@ -54,6 +54,8 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
             } else {
               return Consumer<UserProvider>(
                   builder: (context, UserProvider userProvider, _) {
@@ -74,7 +76,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(height: 20),
                           RowInfo(label: "Nombre", content: userData.firstName),
                           RowInfo(label: "Email", content: userData.email),
-                          const RowInfo(label: "Plan", content: "Normal"),
+                          RowInfo(
+                              label: "Plan",
+                              content: userData.membership.active
+                                  ? "Premium"
+                                  : "Normal"),
                           const SizedBox(height: 20),
                           ActionCard(
                               label: "Mis pedidos",
@@ -100,16 +106,22 @@ class _ProfilePageState extends State<ProfilePage> {
                               label: "Actualizar plan",
                               icon: Icons.data_exploration_rounded,
                               onTap: () {
-                                Navigator.of(context)
-                                    .pushNamed('/premium_offer', arguments: () {
-                                  Navigator.pop(context);
-                                });
+                                Navigator.of(context).pushNamed(
+                                  '/premium_offer',
+                                  arguments: {
+                                    'callback': () {
+                                      Navigator.pop(context);
+                                    },
+                                    'isActive': userData.membership.active
+                                        ? true
+                                        : false,
+                                  },
+                                );
                               }),
                           ActionCard(
                             label: "Cerrar sesión",
                             icon: Icons.logout,
                             onTap: () {
-                              print("cerrar sesion");
                               prefs.clear();
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   "/", (route) => false);

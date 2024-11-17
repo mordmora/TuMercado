@@ -27,6 +27,7 @@ class _PaymentFailureState extends State<PaymentFailure> {
     });
   }
 
+  // ignore: non_constant_identifier_names
   bool unauthorized_access_attempt() {
     return _password == "" || _email == "";
   }
@@ -44,8 +45,6 @@ class _PaymentFailureState extends State<PaymentFailure> {
 
   @override
   Widget build(BuildContext context) {
-    print(_password);
-    print(_email);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -60,7 +59,7 @@ class _PaymentFailureState extends State<PaymentFailure> {
                   onPressed: () {
                     unauthorized_access_attempt()
                         ? Navigator.pushNamedAndRemoveUntil(
-                            context, '/alert', (route) => false) 
+                            context, '/alert', (route) => false)
                         : Navigator.pushNamedAndRemoveUntil(
                             context, '/home', (route) => false);
                   },

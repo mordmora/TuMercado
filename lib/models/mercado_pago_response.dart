@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class MercadoPagoResponse {
   final String link;
   final String linkSandbox;
@@ -23,7 +21,7 @@ class MercadoPagoResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['link'] = link;
     data['linkSandbox'] = linkSandbox;
     data['message'] = message;

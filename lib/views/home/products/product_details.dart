@@ -11,14 +11,16 @@ import 'package:tu_mercado/utils.dart';
 
 class ProductDetails extends StatefulWidget {
   final Product product;
-  const ProductDetails({super.key, required this.product});
+  final bool hasDiscount;
+  const ProductDetails(
+      {super.key, required this.product, required this.hasDiscount});
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  String imagePath = BASE_URL + "/static/imgProducts/";
+  String imagePath = "$BASE_URL/static/imgProducts/";
   TextEditingController quantityController = TextEditingController();
   int quantity = 1;
   bool isValidQuantity = true;
@@ -69,7 +71,9 @@ class _ProductDetailsState extends State<ProductDetails> {
       } else {
         isValidQuantity = true;
         quantity = int.parse(value);
-        _newPrice = widget.product.price * quantity;
+        _newPrice = widget.hasDiscount
+            ? widget.product.price * 0.9 * quantity
+            : widget.product.price * quantity;
         _formatedNewPrice = getFormatMoneyString(_newPrice);
       }
     });
@@ -101,7 +105,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           quantityController.text.isEmpty ||
                                   quantity == 0 ||
                                   quantity == 1
-                              ? "${getFormatMoneyString(widget.product.price)}\$"
+                              ? "${getFormatMoneyString(widget.hasDiscount ? (widget.product.price * 0.9) : widget.product.price)}\$"
                               : "$_formatedNewPrice\$",
                           style: TextStyles.productPrice),
                       const SizedBox(height: 20),
@@ -144,7 +148,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   id: widget.product.id,
                                   name: widget.product.name,
                                   quantity: quantity,
-                                  price: widget.product.price,
+                                  price: widget.hasDiscount
+                                      ? widget.product.price * 0.9
+                                      : widget.product.price,
                                 ));
                                 saveToSharedPreferences();
 
@@ -180,4 +186,3 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 }
-

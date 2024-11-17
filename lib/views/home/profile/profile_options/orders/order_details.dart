@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tu_mercado/components/row_info.dart';
 import 'package:tu_mercado/config/styles.dart';
-import 'package:tu_mercado/models/neighborhood.dart';
 import 'package:tu_mercado/models/order_response.dart';
 import 'package:tu_mercado/models/user_data.dart';
 import 'package:tu_mercado/providers/order_provider.dart';
@@ -29,15 +28,13 @@ class _OrderDetailsState extends State<OrderDetails> {
   }
 
   double getDeliveryPrice() {
-    Neighborhood neighborhood =
-        Provider.of<UserProvider>(context, listen: false).userNeighborhoodData;
-    return neighborhood.price;
+    UserData uData = Provider.of<UserProvider>(context, listen: false).userData;
+
+    return uData.deliveryPrice;
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.order.link);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detalles del pedido", style: TextStyles.title),
@@ -125,6 +122,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 price: getFormatMoneyString(
                                     getTotalPrice() + getDeliveryPrice()),
                               );
+                              print(args.price);
                               Navigator.of(context).pushNamed(
                                 '/order/confirm',
                                 arguments: args,
@@ -166,7 +164,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         TextButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("Cancelar")),
+                                            child: const Text("Cancelar")),
                                         TextButton(
                                             onPressed: () {
                                               Provider.of<OrderProvider>(
@@ -197,13 +195,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                                       '/home',
                                                                       (route) =>
                                                                           false),
-                                                              child: Text("Ok"))
+                                                              child: const Text(
+                                                                  "Ok"))
                                                         ],
                                                       );
                                                     });
                                               });
                                             },
-                                            child: Text("Confirmar")),
+                                            child: const Text("Confirmar")),
                                       ],
                                     );
                                   });

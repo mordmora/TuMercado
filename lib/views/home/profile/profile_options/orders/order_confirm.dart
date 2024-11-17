@@ -26,15 +26,19 @@ class _OrderConfirmState extends State<OrderConfirm> {
   late UserData _userData;
   String price = "";
   String link = "";
+  bool _isLoading = true; // Control de carga
 
   @override
   void initState() {
-    getUserData();
     super.initState();
+    getUserData(); // Llamar a la función para obtener los datos
   }
 
   void getUserData() async {
     _userData = Provider.of<UserProvider>(context, listen: false).userData;
+    setState(() {
+      _isLoading = false; // Cuando se obtiene la información, dejar de cargar
+    });
   }
 
   @override
@@ -63,44 +67,53 @@ class _OrderConfirmState extends State<OrderConfirm> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RowInfo(label: "Pagarás", content: widget.args.price),
-                  RowInfo(
-                      label: "Recibe",
-                      content: "${_userData.firstName} ${_userData.lastName}"),
-                  RowInfo(label: "Dirección", content: _userData.address),
-                ],
-              ),
-              Column(
-                children: [
-                  CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      child: Container(
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          decoration: BoxDecoration(
+          child: _isLoading // Verificamos si está cargando
+              ? const Center(
+                  child:
+                      CircularProgressIndicator()) // Mostrar indicador de carga
+              : Column(
+                  // Mostrar contenido cuando no está cargando
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RowInfo(label: "Pagarás", content: widget.args.price),
+                        RowInfo(
+                            label: "Recibe",
+                            content:
+                                "${_userData.firstName} ${_userData.lastName}"),
+                        RowInfo(label: "Dirección", content: _userData.address),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Palette.green),
-                          child: const Text(
-                            "Pagar",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontFamily: 'Outfit'),
-                          )),
-                      onPressed: () {
-                        _launchMercadoPagoURL();
-                      }),
-                ],
-              )
-            ],
-          ),
+                              color: Palette.green,
+                            ),
+                            child: const Text(
+                              "Pagar",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontFamily: 'Outfit'),
+                            ),
+                          ),
+                          onPressed: () {
+                            _launchMercadoPagoURL();
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
         ),
       ),
     );

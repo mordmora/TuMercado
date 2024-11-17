@@ -12,7 +12,7 @@ class ProductProvider extends ChangeNotifier {
 
   final connection = InternetConnection.createInstance(customCheckOptions: [
     InternetCheckOption(
-      uri: Uri.parse('$_baseUrl'),
+      uri: Uri.parse(_baseUrl),
     ),
   ]);
 
@@ -27,12 +27,6 @@ class ProductProvider extends ChangeNotifier {
     String? token = prefs.getString('token');
     _isLoading = true;
     notifyListeners();
-
-    if (!await connection.hasInternetAccess) {
-      _isLoading = false;
-      print("No internet access");
-      return [];
-    }
     try {
       final response =
           await http.get(Uri.parse('$_baseUrl/user/getProducts'), headers: {
@@ -56,7 +50,7 @@ class ProductProvider extends ChangeNotifier {
       }
     } catch (error) {
       throw Exception(
-          "Ha ocurrido un error al obtener los productos, intenta reiniciar su sesión. Si el problema persiste comunicate con soporte");
+          "Ha ocurrido un error al obtener los productos, intenta reiniciar su sesión. Si el problema persiste comunicate con soporte $error");
     } finally {
       _isLoading = false;
       notifyListeners();

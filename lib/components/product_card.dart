@@ -5,7 +5,8 @@ import 'package:tu_mercado/utils.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
-  const ProductCard({super.key, required this.product});
+  final bool discount;
+  const ProductCard({super.key, required this.product, required this.discount});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -18,7 +19,7 @@ class _ProductCardState extends State<ProductCard> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color.fromARGB(255, 223, 221, 221),
+        color: Color.fromARGB(255, 236, 233, 233),
       ),
       padding: const EdgeInsets.all(0),
       child: Column(
@@ -29,18 +30,39 @@ class _ProductCardState extends State<ProductCard> {
               child:
                   Image(image: NetworkImage(urlImage + widget.product.image))),
           Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.only(left: 5, right: 5, top: 3),
             child: Text(
               widget.product.name,
               style: TextStyles.productTitle,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 5, left: 5),
-            child: Text(
-              "${getFormatMoneyString(widget.product.price)}\$",
-              style: TextStyles.productPrice,
-            ),
+            padding: const EdgeInsets.only(bottom: 3, left: 5),
+            child: widget.discount
+                ? Column(
+                    children: [
+                      Text(
+                        getFormatMoneyString(widget.product.price),
+                        style: const TextStyle(
+                          color: Colors.orangeAccent,
+                          fontSize: 16,
+                          decoration: TextDecoration.lineThrough,
+                          fontFamily: 'Outfit',
+                          letterSpacing: .2,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(height: 1),
+                      Text(
+                        getFormatMoneyString(widget.product.price * (1 - 0.10)),
+                        style: TextStyles.productPrice,
+                      ),
+                    ],
+                  )
+                : Text(
+                    "${getFormatMoneyString(widget.product.price)}\$",
+                    style: TextStyles.productPrice,
+                  ),
           ),
         ],
       ),

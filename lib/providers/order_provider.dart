@@ -14,21 +14,20 @@ class OrderProvider extends ChangeNotifier {
 
   Future<String> createNewOrder(OrderData orderData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _token = prefs.getString("token") ?? "";
-
+    String token = prefs.getString("token") ?? "";
     try {
-      final Uri url = Uri.parse("$_baseUrl/user/createOrder");
+      final Uri url = Uri.parse("$_baseUrl" "user/createOrder");
       final response = await http.post(
         url,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $_token"
+          "Authorization": "Bearer $token"
         },
         body: jsonEncode(orderData.toJson()),
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)["message"]["message"];
+        return jsonDecode(response.body)["data"]["message"];
       } else {
         String messageBody = jsonDecode(response.body)["message"];
         return messageBody;
@@ -41,11 +40,11 @@ class OrderProvider extends ChangeNotifier {
   Future<OrderResponse> getOrders() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String _token = prefs.getString("token") ?? "";
+      String token = prefs.getString("token") ?? "";
       final Uri url = Uri.parse("$_baseUrl/user/getOrders");
       final response = await http.get(url, headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $_token"
+        "Authorization": "Bearer $token"
       });
 
       if (response.statusCode == 200) {
@@ -63,11 +62,11 @@ class OrderProvider extends ChangeNotifier {
   Future<String> cancelOrder(String orderId) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String _token = prefs.getString("token") ?? "";
+      String token = prefs.getString("token") ?? "";
       final Uri url = Uri.parse("$_baseUrl/user/cancelOrder/$orderId");
       final response = await http.get(url, headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $_token"
+        "Authorization": "Bearer $token"
       });
 
       if (response.statusCode == 200) {

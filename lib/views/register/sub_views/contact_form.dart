@@ -94,7 +94,7 @@ class _ContactFormState extends State<ContactForm> {
               border: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black),
               )),
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.black, fontFamily: 'Outfit', fontSize: 16),
           items: items,
           onChanged: (value) {
@@ -117,7 +117,7 @@ class _ContactFormState extends State<ContactForm> {
       ),
       hasSelectedNeighborhood
           ? Text(
-              "En el barrio ${neighborhoodName} el domicilio te cuesta: ${price}",
+              "En el barrio $neighborhoodName el domicilio te cuesta: $price",
               style: TextStyles.normal)
           : const SizedBox(),
       Expanded(

@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +13,7 @@ import 'package:tu_mercado/utils.dart';
 class OrderCard extends StatelessWidget {
   final ROrder order;
 
-  OrderCard({super.key, required this.order});
+  const OrderCard({super.key, required this.order});
 
   double getTotalPrice() {
     double total = 0;
@@ -30,20 +32,21 @@ class OrderCard extends StatelessWidget {
   }
 
   double getHeightRatio(double x) {
-    if (x > 900)
+    if (x > 900) {
       return 0.33;
-    else if (x > 710)
+    } else if (x > 710) {
       return 0.35;
-    else if (x > 650)
+    } else if (x > 650) {
       return 0.36;
-    else
+    } else {
       return 0.40;
+    }
   }
 
   Color getColorsByStatus(String status) {
-    if (status == "Pendiente")
+    if (status == "Pendiente") {
       return Colors.yellow.shade300;
-    else if (status == "Recogiendo tus productos")
+    } else if (status == "Recogiendo tus productos")
       return Colors.orange.shade300;
     else if (status == "Enviado")
       return Colors.green;
@@ -60,7 +63,6 @@ class OrderCard extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double heightRatio = getHeightRatio(height);
-    print(height);
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -97,7 +99,7 @@ class OrderCard extends StatelessWidget {
                               ),
                             );
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.copy_outlined,
                             size: 30,
                             color: Colors.black,
@@ -221,7 +223,7 @@ class DetailButton extends StatelessWidget {
             color: Colors.black,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text("Detalles",
+          child: const Text("Detalles",
               style: TextStyle(
                   color: Colors.white, fontFamily: 'Outfit', fontSize: 18))),
     );

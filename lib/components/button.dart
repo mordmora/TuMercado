@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+// ignore: must_be_immutable
 class CustomButton extends StatefulWidget {
   final void Function() onTap;
   final double width;
@@ -7,8 +8,10 @@ class CustomButton extends StatefulWidget {
   final String label;
   final Color labelColor;
   final Color color;
-  const CustomButton(
+  bool isEnabled;
+  CustomButton(
       {super.key,
+      this.isEnabled = true,
       required this.onTap,
       required this.color,
       required this.labelColor,
@@ -31,7 +34,7 @@ class _CustomButtonState extends State<CustomButton> {
           borderRadius: BorderRadius.circular(40),
         ),
         child: CupertinoButton(
-            onPressed: widget.onTap,
+            onPressed: widget.isEnabled ? widget.onTap : null,
             child: Text(widget.label,
                 style: TextStyle(
                     color: widget.labelColor,

@@ -1,13 +1,13 @@
+// ignore: duplicate_ignore
 // ignore: non_constant_identifier_names
-// ignore_for_file: unused_element
-// ignore: non_constant_identifier_names
-import 'dart:async';
-import 'dart:io';
+// ignore_for_file: unused_element, non_constant_identifier_names
+// ignore: non_constant_identifier_names|||
+
 import 'package:intl/intl.dart';
 
-String BASE_IP = "http://10.0.2.2";
-String BASE_PORT = ":5000";
-String BASE_URL = "$BASE_IP$BASE_PORT";
+String BASE_IP = "http://145.223.73.73:5000/";
+int BASE_PORT = 5000;
+String BASE_URL = BASE_IP;
 String WHATSAPP_URL = "https://wa.me/51999999999";
 
 String getFormatMoneyString(double num) {
@@ -29,13 +29,13 @@ String getFormatMoneyString(double num) {
     parteEnteraFormateada = parteEntera[i] + parteEnteraFormateada;
     contador++;
     if (contador == 3 && i != 0) {
-      parteEnteraFormateada = ',' + parteEnteraFormateada;
+      parteEnteraFormateada = ',$parteEnteraFormateada';
       contador = 0;
     }
   }
 
   if (esNegativo) {
-    parteEnteraFormateada = '-' + parteEnteraFormateada;
+    parteEnteraFormateada = '-$parteEnteraFormateada';
   }
 
   String numeroFormateado = '\$$parteEnteraFormateada.$parteDecimal';
@@ -50,4 +50,12 @@ String formatDate(String dateStr) {
   final DateFormat outputFormat = DateFormat('dd MMM yyyy ');
 
   return outputFormat.format(dateTime);
+}
+
+Future<bool> isHostOnline(String url, int port) async {
+  try {
+    return true;
+  } catch (e) {
+    return false;
+  }
 }

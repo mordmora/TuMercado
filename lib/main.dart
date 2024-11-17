@@ -17,30 +17,24 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //await PushNotificationService.initialiseApp();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.android,
+    name: 'tumercado-ecc4c',
+  );
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  messaging.requestPermission();
+  await messaging.requestPermission();
   String token = "";
-  messaging.getToken().then((value) {
+  await messaging.getToken().then((value) {
     token = value!;
-    prefs.setString("deviceID", token);
-
+    print("FCM_TOK: $token");
+    prefs.setString("deviceID", value);
   });
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-    print('Message notification: ${message.notification?.title}');
-    print('Message notification: ${message.notification?.body}');
-  });
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('A new onMessageOpenedApp event was published!');
-    print('Message data: ${message.data}');
+    print(message.data);
   });
 
   runApp(const MyApp());
@@ -48,7 +42,6 @@ Future<void> main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -73,13 +66,11 @@ class _MyAppState extends State<MyApp> {
   Future<void> initDeepLinks() async {
     _appLinks = AppLinks();
     _appLinkSubscription = _appLinks.uriLinkStream.listen((uri) {
-      print(uri);
       openAppLink(uri);
     });
   }
 
   void openAppLink(Uri uri) {
-    print("openAppLink: $uri");
     _navigatorKey.currentState?.pushNamed(uri.path);
   }
 

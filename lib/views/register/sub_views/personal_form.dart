@@ -24,7 +24,6 @@ class PersonalForm extends StatefulWidget {
 class _PersonalFormState extends State<PersonalForm> {
   String dropdownValue = 'Genero';
   String date = "";
-
   @override
   Widget build(BuildContext context) {
     List<String> items = ['Masculino', 'Femenino', 'Otro'];
@@ -54,34 +53,28 @@ class _PersonalFormState extends State<PersonalForm> {
             controller: widget.lastNameController,
           ),
           const SizedBox(height: 20),
-          const Text("Fecha de nacimiento", style: TextStyles.subtitle),
-          CustomTextField(
-            hintText: 'AAAA/MM/DD',
-            onChanged: (value) {
-              setState(() {});
-            },
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a date';
-              }
-              if (!_isValidDate(value)) {
-                return 'Please enter a valid date';
-              }
-              return null;
-            },
-            formatter: [
-              DateTextInputFormatter(),
-            ],
-            keyboardType: TextInputType.datetime,
-            isPassword: false,
+          TextFormField(
             controller: widget.dateController,
-          ),
-          _isValidDate(widget.dateController.text) == false
-              ? const Text("Ingresa una fecha valida, por ejemplo 2000/01/01",
-                  style: TextStyles.error)
-              : const SizedBox(
-                  height: 20,
+            decoration: const InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  style: BorderStyle.solid,
+                  color: Colors.black,
+                  width: 2,
                 ),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                color: Colors.black,
+                width: 2,
+              )),
+              labelStyle: TextStyle(color: Colors.black),
+              label: Text("Fecha de nacimiento", style: TextStyles.subtitle),
+              prefixIcon: Icon(Icons.date_range),
+            ),
+            onTap: _datePiker,
+            readOnly: true,
+          ),
           DropdownMenu(
             textStyle: TextStyles.normal,
             inputDecorationTheme: const InputDecorationTheme(
@@ -90,7 +83,7 @@ class _PersonalFormState extends State<PersonalForm> {
             enableSearch: false,
             width: 140,
             menuStyle: const MenuStyle(
-              backgroundColor: MaterialStatePropertyAll(Palette.green),
+              backgroundColor: WidgetStatePropertyAll(Palette.green),
             ),
             hintText: "Género",
             dropdownMenuEntries: items
@@ -122,33 +115,21 @@ class _PersonalFormState extends State<PersonalForm> {
         ]);
   }
 
-  bool _isValidDate(String value) {
-    final dateRegex = RegExp(r'^\d{4}/\d{2}/\d{2}$');
-    if (!dateRegex.hasMatch(value)) {
-      return false;
+  Future<void> _datePiker() async {
+    final DateTime? picked = await showDatePicker(
+      barrierColor: Colors.white,
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        String text = picked.toString().split(' ')[0].replaceAll('-', '/');
+        text.replaceAll('-', '/');
+        widget.dateController.text = text;
+      });
     }
-    final parts = value.split('/');
-    final year = int.parse(parts[0]);
-    final month = int.parse(parts[1]);
-    final day = int.parse(parts[2]);
-
-    if (month < 1 || month > 12) {
-      return false;
-    }
-    if (day < 1 || day > 31) {
-      return false;
-    }
-    // Check for valid days in each month
-    if (month == 2) {
-      // Leap year check
-      bool isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-      if (day > (isLeapYear ? 29 : 28)) {
-        return false;
-      }
-    } else if ([4, 6, 9, 11].contains(month) && day > 30) {
-      return false;
-    }
-    return true;
   }
 }
 

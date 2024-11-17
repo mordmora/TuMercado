@@ -26,7 +26,7 @@ class Product {
       name: json['name'],
       description: json['description'],
       price: json['price'],
-      stock: json['stock'],
+      stock: json['amount'],
       createAt: json['createAt'],
       updateAt: json['updateAt'],
     );
@@ -38,7 +38,7 @@ class Product {
       'name': name,
       'description': description,
       'price': price,
-      'stock': stock,
+      'amount': stock,
       'createAt': createAt,
       'updateAt': updateAt,
       'file': image

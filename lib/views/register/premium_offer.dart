@@ -9,7 +9,9 @@ import 'package:tu_mercado/providers/order_provider.dart';
 
 class PremiumOffer extends StatelessWidget {
   final void Function() onPressed;
-  const PremiumOffer({super.key, required this.onPressed});
+  final bool isActive;
+  const PremiumOffer(
+      {super.key, required this.onPressed, required this.isActive});
 
   void _openMercadoPago(BuildContext ctx) {
     String link = "";
@@ -19,13 +21,14 @@ class PremiumOffer extends StatelessWidget {
       link = value;
     }).whenComplete(() {
       launchUrl(Uri.parse(link),
-          customTabsOptions: CustomTabsOptions(
+          customTabsOptions: const CustomTabsOptions(
             shareState: CustomTabsShareState.on,
           ));
     });
   }
 
   Widget _confirmationDialog(BuildContext ctx) {
+    print("isActive: $isActive");
     return AlertDialog(
         backgroundColor: Colors.transparent,
         contentPadding: EdgeInsets.zero,
@@ -45,7 +48,6 @@ class PremiumOffer extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.black, fontFamily: 'Outfit', fontSize: 16),
               ),
-              const SizedBox(height: 20),
               Row(children: [
                 Expanded(
                   child: CupertinoButton(
@@ -99,6 +101,10 @@ class PremiumOffer extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               ),
+              isActive
+                  ? const Text("¡Ya eres premium!", style: TextStyles.title)
+                  : const Text("¡Hazte premium!", style: TextStyles.title),
+              const SizedBox(height: 20),
               const Text(
                   "Actualiza tu membresía y obten los siguientes beneficios:",
                   style: TextStyles.subtitle),
@@ -118,22 +124,24 @@ class PremiumOffer extends StatelessWidget {
               const Expanded(child: SizedBox()),
               CupertinoButton(
                 padding: EdgeInsets.zero,
+                onPressed: isActive
+                    ? null
+                    : () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => _confirmationDialog(context));
+                      },
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: isActive ? Colors.grey : Colors.black,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   width: MediaQuery.of(context).size.width,
                   child: Text("Actualizar membresía",
                       style: TextStyles.subtitle.copyWith(color: Colors.white)),
                 ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => _confirmationDialog(context));
-                },
               ),
               Stack(
                 children: [
@@ -142,12 +150,12 @@ class PremiumOffer extends StatelessWidget {
                     child: TextButton(
                         style: ButtonStyle(
                           overlayColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                              WidgetStateProperty.all(Colors.transparent),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
                         ),
                         onPressed: onPressed,
-                        child: Text("Omitir por ahora",
+                        child: Text(isActive ? "Volver" : "Omitir por ahora",
                             style: TextStyles.normal
                                 .copyWith(color: Colors.grey))),
                   ),

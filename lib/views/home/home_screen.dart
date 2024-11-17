@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
-import 'package:tu_mercado/providers/auth_provider.dart';
+import 'package:tu_mercado/models/user_data.dart';
+import 'package:tu_mercado/providers/user_data_provider.dart';
 import 'package:tu_mercado/views/home/cart/cart_page.dart';
 import 'package:tu_mercado/views/home/profile/profile_page.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+// ignore: library_prefixes
 
 import 'products/home_widget.dart';
 
@@ -19,10 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PageController _pageController = PageController();
-  String _email = "";
-  String _password = "";
-  String _token = "";
-  String _deviceID = "";
+  late UserData usrDt;
 
   late SharedPreferences prefs;
 
@@ -37,43 +37,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(const Duration(hours: 1), (timer) {
-      getSharedPreferences();
-    });
-
-    getSharedPreferences();
     super.initState();
+    getSharedPreferences();
+    //usrDt = Provider.of<UserProvider>(
+    //       // ignore: use_build_context_synchronously
+    //        context,
+    //        listen: false)
+    //    .userData;
     _pageController = PageController();
+    _isLoading = false;
   }
 
   @override
   void dispose() {
     _pageController.dispose();
-    _timer.cancel();
     super.dispose();
   }
 
-  late IO.Socket socket;
-  late Timer _timer;
-
   Future<void> getSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
-    _email = prefs.getString("email") ?? "";
-    _password = prefs.getString("password") ?? "";
-    _deviceID = prefs.getString("deviceID") ?? "";
-    AuthProvider().login(_email, _password, _deviceID).then((value) => {
-          _token = value,
-          prefs.setString("token", value),
-          _isLoading = false,
-          setState(() {
-            print("Im here");
-          }),
-        });
+    await Provider.of<UserProvider>(context, listen: false).getUserData();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("token loaded: $_token");
     return _isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
@@ -104,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             appBar: AppBar(
+              backgroundColor: Colors.white,
               centerTitle: true,
               title: const Text(
                 "TuMercado",
@@ -111,16 +99,25 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             resizeToAvoidBottomInset: true,
-            body: SafeArea(
-                child: PageView(
-              controller: _pageController,
-              onPageChanged: (value) {
-                setState(() {
-                  _index = value;
-                });
-              },
-              children: pages,
-            )),
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                SvgPicture.asset(
+                  'lib/assets/bg.svg',
+                  fit: BoxFit.fill,
+                ),
+                SafeArea(
+                    child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (value) {
+                    setState(() {
+                      _index = value;
+                    });
+                  },
+                  children: pages,
+                )),
+              ],
+            ),
           );
   }
 }

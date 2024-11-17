@@ -92,7 +92,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: Text(
                             textAlign: TextAlign.center,
                             userData.neighbordhood,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
                                 fontFamily: 'Outfit',

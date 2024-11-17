@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tu_mercado/config/styles.dart';
 import 'package:tu_mercado/models/products.dart';
-import 'package:tu_mercado/providers/auth_provider.dart';
+import 'package:tu_mercado/models/user_data.dart';
 import 'package:tu_mercado/providers/product_provider.dart';
+import 'package:tu_mercado/providers/user_data_provider.dart';
 import 'package:tu_mercado/views/home/products/product_details.dart';
-
 import '../../../components/product_card.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -21,33 +23,33 @@ class _HomeWidgetState extends State<HomeWidget> {
   late SharedPreferences prefs;
   late List<Product> products;
   late Future<List<Product>> fetchProducts;
-
-  String _email = "";
-  String _password = "";
+  late UserData usrData;
+  bool hasMembership = false;
+  bool hasFirstDiscount = false;
+  bool hasUsedFirstDiscount = true;
 
   @override
   void initState() {
-    //getSharedPreferences();
+    getSharedPreferences();
     super.initState();
     fetchProducts = ProductProvider().fetchProducts();
+    usrData = Provider.of<UserProvider>(
+            // ignore: use_build_context_synchronously
+            context,
+            listen: false)
+        .userData;
   }
 
-/*
   Future<void> getSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
-    _email = prefs.getString("email") ?? "";
-    _password = prefs.getString("password") ?? "";
-    AuthProvider()
-        .login(_email, _password)
-        .then((value) => {prefs.setString("token", value)})
-        .whenComplete(() {
-      setState(() {});
-    });
+    hasFirstDiscount = usrData.membership.discount;
+    hasMembership = usrData.membership.active;
   }
-*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -57,7 +59,33 @@ class _HomeWidgetState extends State<HomeWidget> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('${snapshot.error}'));
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Ocurrió un arror: Revisa tu conección a internet o intenta reiniciar sesión, si el problema persiste, comunicate con soporte.',
+                    style: TextStyles.normal,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/login', (route) => false);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(Colors.black),
+                    ),
+                    child: const Text(
+                      "Cerrar sesión",
+                      style:
+                          TextStyle(color: Colors.white, fontFamily: "Outfit"),
+                    ),
+                  ),
+                ],
+              ));
             } else {
               final products = snapshot.data!;
               return products.isEmpty
@@ -69,18 +97,21 @@ class _HomeWidgetState extends State<HomeWidget> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CupertinoButton(
+                            disabledColor: Colors.grey,
                             padding: EdgeInsets.zero,
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ProductDetails(
+                                    hasDiscount: hasFirstDiscount,
                                     product: product,
                                   ),
                                 ),
                               );
                             },
                             child: ProductCard(
+                              discount: hasFirstDiscount,
                               product: product,
                             ),
                           ),

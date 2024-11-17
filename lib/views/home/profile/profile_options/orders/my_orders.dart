@@ -26,6 +26,7 @@ class _OrderProgressState extends State<OrderProgress> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("Mis pedidos", style: TextStyles.title),
       ),
       body: Center(
@@ -38,15 +39,22 @@ class _OrderProgressState extends State<OrderProgress> {
             return Consumer<OrderProvider>(
               builder: (context, OrderProvider orderProvider, _) {
                 orderResponse = orderProvider.orderResponse;
-                return ListView.builder(
-                  itemCount: orderResponse!.orders.length,
-                  itemBuilder: (context, index) {
-                    ROrder order = orderResponse!.orders[index];
-                    return OrderCard(
-                      order: order,
-                    );
-                  },
-                );
+                return orderResponse!.orders.isEmpty
+                    ? const Center(
+                        child: Text(
+                          "Aún no has realizado ningun pedido.",
+                          style: TextStyles.normal,
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: orderResponse!.orders.length,
+                        itemBuilder: (context, index) {
+                          ROrder order = orderResponse!.orders[index];
+                          return OrderCard(
+                            order: order,
+                          );
+                        },
+                      );
               },
             );
           }

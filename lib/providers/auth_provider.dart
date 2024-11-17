@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:tu_mercado/models/User.dart';
 import 'package:tu_mercado/models/neighborhood.dart';
 import 'package:tu_mercado/utils.dart';
@@ -12,15 +10,9 @@ class AuthProvider extends ChangeNotifier {
   final Uri baseUrl = Uri.parse(BASE_URL);
   bool _rememberMe = false;
   String neighborhood = "";
-  final connection = InternetConnection.createInstance(customCheckOptions: [
-    InternetCheckOption(
-      uri: Uri.parse(BASE_URL),
-    ),
-  ]);
 
   set setNeighborhood(String value) {
     neighborhood = value;
-    print("Barrio: " + neighborhood);
     notifyListeners();
   }
 
@@ -31,10 +23,6 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<String> login(String email, String password, String deviceID) async {
-    bool hasInternetConnection = await connection.hasInternetAccess;
-    if (!hasInternetConnection) {
-      return "No se ha podido conectar con el servidor, por favor revisa tu conexión a internet.";
-    }
     try {
       Map<String, String> data = {
         "email": email,
@@ -42,7 +30,8 @@ class AuthProvider extends ChangeNotifier {
         "token": deviceID
       };
       String token = "";
-      final Uri url = Uri.parse("$baseUrl/user/login");
+      final Uri url = Uri.parse("$baseUrl" "user/login");
+
       final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(data));
@@ -53,6 +42,7 @@ class AuthProvider extends ChangeNotifier {
         return token;
       } else {
         String messageBody = jsonDecode(response.body)["message"];
+        print(messageBody);
         return messageBody;
       }
     } catch (e) {
@@ -63,11 +53,6 @@ class AuthProvider extends ChangeNotifier {
   Future<String> register(User user, String email, String password) async {
     final Uri url = Uri.parse("$baseUrl/user/signUp");
 
-    bool hasInternetConnection = await connection.hasInternetAccess;
-
-    if (!hasInternetConnection) {
-      return "No se ha podido conectar con el servidor, por favor revisa tu conexión a internet.";
-    }
     try {
       Map<String, String> data = {
         "email": email,

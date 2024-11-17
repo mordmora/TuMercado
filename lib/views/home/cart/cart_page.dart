@@ -12,6 +12,7 @@ import 'package:tu_mercado/models/mercado_pago_response.dart';
 import 'package:tu_mercado/models/order.dart';
 import 'package:tu_mercado/models/send_order_model.dart';
 import 'package:tu_mercado/providers/order_provider.dart';
+import 'package:tu_mercado/providers/user_data_provider.dart';
 import 'package:tu_mercado/utils.dart';
 
 class CartPage extends StatefulWidget {
@@ -27,6 +28,7 @@ class _CartPageState extends State<CartPage> with RouteAware {
   bool isLoading = true; // Variable para controlar la carga de datos
   String _response = "";
   List<MercadoPagoResponse> createdOrders = List.empty(growable: true);
+  bool _btnEnabled = true;
 
   @override
   void didChangeDependencies() {
@@ -65,7 +67,6 @@ class _CartPageState extends State<CartPage> with RouteAware {
 
   Future<void> readCreatedOrders() async {
     List<String>? orders = prefs.getStringList('createdOrders');
-    print(orders?.length);
     if (orders != null) {
       createdOrders = orders.map((order) {
         return MercadoPagoResponse.fromJson(jsonDecode(order));
@@ -111,7 +112,7 @@ class _CartPageState extends State<CartPage> with RouteAware {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: clientOrders.isEmpty
           ? const Center(
               child: Column(
@@ -189,50 +190,78 @@ class _CartPageState extends State<CartPage> with RouteAware {
                   },
                 ),
                 Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomButton(
-                      label: 'Realizar pedido',
-                      color: Colors.black,
-                      labelColor: Colors.white,
-                      height: 55,
-                      width: 200,
-                      onTap: () {
-                        OrderData orderData = OrderData(
-                          order: Order(value: getTotalPrice(), details: ""),
-                          products: clientOrders,
-                        );
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomButton(
+                        isEnabled: _btnEnabled,
+                        label: 'Realizar pedido',
+                        color: Colors.black,
+                        labelColor: Colors.white,
+                        height: 55,
+                        width: 200,
+                        onTap: () {
+                          _btnEnabled = false;
+                          setState(() {});
 
-                        Provider.of<OrderProvider>(context, listen: false)
-                            .createNewOrder(orderData)
-                            .then((value) => {
-                                  _response = value,
-                                  print(_response),
-                                })
-                            .whenComplete(() {
-                          clientOrders.clear();
-                          saveToSharedPreferences();
-                          saveOrderToSharedPreferences();
+                          OrderData orderData = OrderData(
+                            order: Order(value: getTotalPrice(), details: ""),
+                            products: clientOrders,
+                          );
 
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: const Text(""),
-                                    content: Text(_response),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text("Ok"))
-                                    ],
-                                  ));
-                        });
-                      },
-                    ),
-                  ),
-                )
+                          Provider.of<OrderProvider>(context, listen: false)
+                              .createNewOrder(orderData)
+                              .then((value) => {
+                                    _response = value,
+                                  })
+                              .whenComplete(() {
+                            clientOrders.clear();
+                            saveToSharedPreferences();
+                            saveOrderToSharedPreferences();
+                            prefs.setBool("first_discount", false);
+                            Provider.of<UserProvider>(context, listen: false)
+                                .getUserData();
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: const Text(""),
+                                      content: Text(_response),
+                                      actions: [
+                                        TextButton(
+                                            style: const ButtonStyle(
+                                                foregroundColor:
+                                                    WidgetStatePropertyAll(
+                                                        Colors.white),
+                                                backgroundColor:
+                                                    WidgetStatePropertyAll(
+                                                        Colors.black)),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Pagar mas tarde",
+                                                style: TextStyles.normal)),
+                                        TextButton(
+                                            style: const ButtonStyle(
+                                                foregroundColor:
+                                                    WidgetStatePropertyAll(
+                                                        Colors.white),
+                                                backgroundColor:
+                                                    WidgetStatePropertyAll(
+                                                        Colors.black)),
+                                            onPressed: () {
+                                              Navigator.pushNamed(
+                                                  context, '/user/my_orders');
+                                            },
+                                            child: const Text(
+                                              "Pagar ahora",
+                                              style: TextStyles.normal,
+                                            ))
+                                      ],
+                                    ));
+                          });
+                        },
+                      ),
+                    )),
               ],
             ),
     );

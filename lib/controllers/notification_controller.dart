@@ -26,7 +26,6 @@ class NotificationController {
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
     // Your code goes here
-
     // Navigate into pages, avoiding to open the notification details page over another details page already opened
   }
 }
