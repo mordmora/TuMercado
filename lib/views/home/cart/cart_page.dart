@@ -205,10 +205,9 @@ class _CartPageState extends State<CartPage> with RouteAware {
                           setState(() {});
 
                           OrderData orderData = OrderData(
-                            order: Order(value: getTotalPrice(), details: ""),
+                            order: Order(details: ""),
                             products: clientOrders,
                           );
-
                           Provider.of<OrderProvider>(context, listen: false)
                               .createNewOrder(orderData)
                               .then((value) => {

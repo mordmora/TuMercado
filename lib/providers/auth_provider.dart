@@ -42,7 +42,7 @@ class AuthProvider extends ChangeNotifier {
         return token;
       } else {
         String messageBody = jsonDecode(response.body)["message"];
-        print(messageBody);
+
         return messageBody;
       }
     } catch (e) {

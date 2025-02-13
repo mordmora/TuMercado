@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
@@ -28,7 +30,6 @@ class PremiumOffer extends StatelessWidget {
   }
 
   Widget _confirmationDialog(BuildContext ctx) {
-    print("isActive: $isActive");
     return AlertDialog(
         backgroundColor: Colors.transparent,
         contentPadding: EdgeInsets.zero,

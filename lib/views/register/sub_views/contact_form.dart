@@ -99,7 +99,6 @@ class _ContactFormState extends State<ContactForm> {
           items: items,
           onChanged: (value) {
             setState(() {
-              print(value);
               neighborhoodName = value.toString();
               price = getNeighborhoodPrice(neighborhoodName);
               hasSelectedNeighborhood = true;

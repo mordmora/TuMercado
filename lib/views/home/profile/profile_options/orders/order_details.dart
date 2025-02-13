@@ -85,7 +85,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   const Text("Total: ", style: TextStyles.subtitle),
                   Text(
                       getFormatMoneyString(
-                          getTotalPrice() + getDeliveryPrice()),
+                          widget.order.value + getDeliveryPrice()),
                       style: TextStyles.subtitle),
                 ],
               ),
@@ -120,9 +120,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                               Args args = Args(
                                 link: widget.order.link,
                                 price: getFormatMoneyString(
-                                    getTotalPrice() + getDeliveryPrice()),
+                                    widget.order.value + getDeliveryPrice()),
                               );
-                              print(args.price);
                               Navigator.of(context).pushNamed(
                                 '/order/confirm',
                                 arguments: args,

@@ -88,8 +88,9 @@ class OrderProvider extends ChangeNotifier {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${prefs.getString("token")}"
       });
+
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)["message"]["link"];
+        return jsonDecode(response.body)["link"];
       } else {
         throw Exception("Error al cargar el link de membresia");
       }

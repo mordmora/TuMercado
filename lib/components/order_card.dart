@@ -128,7 +128,7 @@ class OrderCard extends StatelessWidget {
                           color: Colors.black,
                           fontSize: 16,
                           fontFamily: 'Outfit')),
-                  Text(getFormatMoneyString(getTotalPrice()),
+                  Text(getFormatMoneyString(order.value),
                       style: TextStyles.getTittleStyleWithSize(16))
                 ],
               ),

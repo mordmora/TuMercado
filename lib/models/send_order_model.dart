@@ -1,26 +1,22 @@
 import 'package:tu_mercado/models/order.dart';
 
 class Order {
-  double value;
   String details;
 
-  Order({required this.value, required this.details});
+  Order({required this.details});
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      value: json['value'],
       details: json['details'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'value': value,
       'details': details,
     };
   }
 }
-
 
 class OrderData {
   Order order;
