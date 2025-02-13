@@ -69,11 +69,6 @@ class _LoginState extends State<Login> {
     double width = MediaQuery.of(context).size.width;
 
     // ignore: no_leading_underscores_for_local_identifiers
-    void _onRememberMeChanged(bool? value) {
-      setState(() {
-        rememberMe = value!;
-      });
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,
