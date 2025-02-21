@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +25,7 @@ class _LoginState extends State<Login> {
   //Var Definition
   String _email = "";
   String _password = "";
-  bool rememberMe = true;
+  bool rememberMe = false;
   String deviceID = "";
   late UserData _userData;
 
@@ -56,8 +54,9 @@ class _LoginState extends State<Login> {
   void getPreferences() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      rememberMe = prefs.getBool("rememberMe") ?? true;
+      rememberMe = prefs.getBool("rememberMe") ?? false;
       deviceID = prefs.getString("deviceID") ?? "void";
+      print("device id: $deviceID");
     });
   }
 
@@ -69,33 +68,26 @@ class _LoginState extends State<Login> {
     double width = MediaQuery.of(context).size.width;
 
     // ignore: no_leading_underscores_for_local_identifiers
+    void _onRememberMeChanged(bool? value) {
+      setState(() {
+        rememberMe = value!;
+      });
+    }
 
     return Scaffold(
-      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: height * 0.08),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: const Image(
-                    image: AssetImage('lib/assets/logo.png'),
-                    width: 90,
-                  ),
-                ),
-                const Text(
-                  "Bienvenido",
-                  style: TextStyles.title,
-                ),
-              ],
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              "Bienvenido",
+              style: TextStyles.title,
             ),
           ),
-          SizedBox(height: height * 0.05),
+          SizedBox(height: height * 0.08),
           Expanded(
             child: Container(
                 padding:
@@ -130,6 +122,22 @@ class _LoginState extends State<Login> {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Row(children: [
+                              Checkbox(
+                                fillColor:
+                                    const WidgetStatePropertyAll(Colors.black),
+                                value: rememberMe,
+                                onChanged: (value) {
+                                  _onRememberMeChanged(value);
+                                },
+                              ),
+                              const Text("Recuérdame",
+                                  style: TextStyle(
+                                      fontFamily: "Outfit",
+                                      letterSpacing:
+                                          BorderSide.strokeAlignInside,
+                                      fontSize: 16))
+                            ]),
                             CupertinoButton(
                                 color: Colors.transparent,
                                 padding: EdgeInsets.zero,
@@ -152,6 +160,7 @@ class _LoginState extends State<Login> {
                             authProvider
                                 .login(_email, _password, deviceID)
                                 .then((value) async => {
+                                      print(value),
                                       if (value.contains("incorrectos") ||
                                           value ==
                                               "No se ha podido conectar con el servidor, por favor revisa tu conexión a internet.")
@@ -173,7 +182,6 @@ class _LoginState extends State<Login> {
                                                   listen: false)
                                               .getUserData(),
                                           _userData = Provider.of<UserProvider>(
-                                                  // ignore: duplicate_ignore
                                                   // ignore: use_build_context_synchronously
                                                   context,
                                                   listen: false)

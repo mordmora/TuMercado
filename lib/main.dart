@@ -17,20 +17,25 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.android,
     name: 'tumercado-ecc4c',
   );
-  SharedPreferences prefs = await SharedPreferences.getInstance();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   await messaging.requestPermission();
+  String token = "";
   await messaging.getToken().then((value) {
-    prefs.setString("deviceID", value!);
+    token = value!;
+    print("FCM_TOK: $token");
+    prefs.setString("deviceID", value);
   });
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
 
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print(message.data);
+  });
 
   runApp(const MyApp());
 }
@@ -61,14 +66,15 @@ class _MyAppState extends State<MyApp> {
   Future<void> initDeepLinks() async {
     _appLinks = AppLinks();
     _appLinkSubscription = _appLinks.uriLinkStream.listen((uri) {
-      openAppLink(uri.path);
+      openAppLink(uri);
     });
   }
 
-  void openAppLink(String uri) {
-    _navigatorKey.currentState?.pushNamedAndRemoveUntil(uri, (route) => false);
+  void openAppLink(Uri uri) {
+    _navigatorKey.currentState?.pushNamed(uri.path);
   }
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

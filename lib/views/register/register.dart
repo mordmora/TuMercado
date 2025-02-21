@@ -1,5 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -209,6 +208,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
                 Provider.of<AuthProvider>(context, listen: false)
                     .register(user, _email, _password)
                     .then((value) {
+                  print(value);
                   if (value != "Registro completado") {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -289,177 +289,67 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
 
   Future<dynamic> showConditionsTerms(BuildContext context) {
     return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Colors.transparent,
-        contentPadding: EdgeInsets.zero,
-        content: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Términos y Condiciones',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              backgroundColor: Colors.transparent,
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
                 ),
-              ),
-              const SizedBox(height: 20),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(fontSize: 14, color: Colors.black),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        text: 'Al registrarte estás aceptando nuestros ',
+                        style: TextStyles.normal.copyWith(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'términos y condiciones',
+                            style: const TextStyle(
+                                color: Palette.greenDark,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Outfit',
+                                decoration: TextDecoration.underline),
+                            recognizer: TapGestureRecognizer()..onTap = () {},
+                          ),
+                          const TextSpan(
+                            text: '.',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        TextSpan(
-                          text: '1. Aceptación de los Términos\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ActionsButtons(
+                          text: "Aceptar",
+                          onPressed: () {
+                            termsAccepted = true;
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/login', (route) => false);
+                          },
                         ),
-                        TextSpan(
-                          text:
-                              'Al acceder y utilizar TuMercado usted acepta estar sujeto a los siguientes términos y condiciones. Si no está de acuerdo con estos términos, le solicitamos que no utilice el software.\n\n',
-                        ),
-                        TextSpan(
-                          text: '2. Definiciones\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: '• Software: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'Se refiere a TuMercado propiedad de TECHNOLOGY GLOBAL AMBIENTAL SAS que le proporciona a los usuarios acceso los componentes principales del sistema que son; un panel administrativo, aplicación de Clientes y aplicación de Domiciliarios.\n\n',
-                        ),
-                        TextSpan(
-                          text: '• Usuario: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'Cualquier persona que utilice el software, ya sea como usuario registrado o invitado.\n\n',
-                        ),
-                        TextSpan(
-                          text: '• Servicios y uso de la aplicación: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'Son todas las funcionalidades ofrecidas por el software, tales como:\n\n',
-                        ),
-                        TextSpan(
-                          text:
-                              '• El panel principal muestra datos estadísticos de los pedidos y sus respectivos estados:\n',
-                        ),
-                        TextSpan(
-                            text:
-                                '  • Pendiente\n  • Cancelado\n  • En camino\n  • Realizados\n\n'),
-                        TextSpan(
-                          text: '• El administrador es el encargado de:\n',
-                        ),
-                        TextSpan(
-                            text:
-                                '  • Crear productos\n  • Registrar barrios\n  • Registrar domiciliarios\n  • Registrar bodegas\n\n'),
-                        TextSpan(
-                          text: '3. Licencia de Uso\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'El software se proporciona bajo una licencia limitada, no exclusiva, intransferible para su uso personal o comercial, de acuerdo con las condiciones aquí establecidas. Queda prohibido:\n',
-                        ),
-                        TextSpan(
-                            text:
-                                '• Modificar, adaptar o descompilar el software.\n• Redistribuir, vender o transferir el software a terceros sin autorización.\n• Utilizar el software para fines ilegales o no permitidos por estos términos.\n\n'),
-                        TextSpan(
-                          text: '4. Registro de Usuario\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'Al crear una cuenta o registrar el uso del software, el usuario deberá proporcionar información personal exacta y actualizada. Usted es responsable de mantener la confidencialidad de su cuenta y contraseña.\n\n',
-                        ),
-                        TextSpan(
-                          text: '5. Protección de Datos Personales\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'El tratamiento de sus datos personales está sujeto a la Ley 1581 de 2012 y la Política de Privacidad del software. Al utilizar el software, usted autoriza el tratamiento de sus datos conforme a la política mencionada. Los datos recopilados pueden incluir, entre otros, su nombre, correo electrónico y otros datos necesarios para la prestación del servicio.\n\n',
-                        ),
-                        TextSpan(
-                          text: '6. Propiedad Intelectual\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'El software, su código fuente, interfaz, diseño y contenido son propiedad exclusiva de TECHNOLOGY GLOBAL AMBIENTAL SAS y están protegidos por las leyes de propiedad intelectual de Colombia. El usuario no adquiere ningún derecho sobre el software más allá de la licencia de uso otorgada.\n\n',
-                        ),
-                        TextSpan(
-                          text: '7. Responsabilidad\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'El software se proporciona "tal cual", sin garantías de ningún tipo, explícitas o implícitas.\nTECHNOLOGY GLOBAL AMBIENTAL no será responsable por daños directos, indirectos, incidentales, especiales o consecuentes derivados del uso del software, incluidos daños a dispositivos electrónicos o pérdida de datos.\n\n',
-                        ),
-                        TextSpan(
-                          text: '8. Modificaciones\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'TECHNOLOGY GLOBAL AMBIENTAL se reserva el derecho de modificar estos términos y condiciones en cualquier momento, sin previo aviso. Cualquier modificación será efectiva una vez publicada en la página web o plataforma del software. Es responsabilidad del usuario revisar periódicamente estos términos.\n\n',
-                        ),
-                        TextSpan(
-                          text: '9. Duración y Terminación\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'La licencia de uso del software tiene una duración indefinida, salvo que se rescinda por alguna de las partes. El usuario puede cancelar su cuenta en cualquier momento. TECHNOLOGY GLOBAL AMBIENTAL podrá suspender o terminar la cuenta de un usuario por incumplimiento de estos términos.\n\n',
-                        ),
-                        TextSpan(
-                          text: '10. Ley Aplicable y Jurisdicción\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'Estos términos y condiciones se regirán por las leyes de la República de Colombia. Cualquier disputa relacionada con el uso del software será resuelta ante los tribunales competentes de Santa Marta.',
+                        ActionsButtons(
+                          text: "Cancelar",
+                          onPressed: () {
+                            termsAccepted = false;
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/login', (route) => false);
+                          },
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false),
-                    child: const Text('Cancelar'),
-                  ),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Aceptar'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ));
   }
 }
 

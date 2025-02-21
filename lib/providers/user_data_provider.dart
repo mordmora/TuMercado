@@ -15,7 +15,7 @@ class UserProvider extends ChangeNotifier {
   Future<void> getUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-
+    print(token);
     isLoading = true;
     notifyListeners();
     try {
@@ -27,11 +27,10 @@ class UserProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
         UserData userData = UserData.fromJson(jsonResponse['data']);
-
+        print(response.body);
         _userData = userData;
         notifyListeners();
       }
-      // ignore: empty_catches
     } catch (error) {}
   }
 
