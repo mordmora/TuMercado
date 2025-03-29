@@ -32,12 +32,17 @@ class _HomeWidgetState extends State<HomeWidget> {
   void initState() {
     getSharedPreferences();
     super.initState();
+    
     fetchProducts = ProductProvider().fetchProducts();
     usrData = Provider.of<UserProvider>(
             // ignore: use_build_context_synchronously
             context,
             listen: false)
         .userData;
+        if(usrData == null){
+          Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        }
+    usrData = Provider.of<UserProvider>(context, listen: false).userData;
   }
 
   Future<void> getSharedPreferences() async {

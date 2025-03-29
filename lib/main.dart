@@ -17,20 +17,20 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.android,
-    name: 'tumercado-ecc4c',
-  );
+  //await Firebase.initializeApp(
+  //  options: DefaultFirebaseOptions.android,
+  //  name: 'tumercado-ecc4c',
+  //);
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  await messaging.requestPermission();
-  await messaging.getToken().then((value) {
-    prefs.setString("deviceID", value!);
-  });
+ // FirebaseMessaging messaging = FirebaseMessaging.instance;
+ // await messaging.requestPermission();
+ // await messaging.getToken().then((value) {
+    prefs.setString("deviceID", "random_test_token");
+ // });
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
+  //FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
 
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
+ // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
 
   runApp(const MyApp());
 }
@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MediaQuery(
         data: MediaQuery.of(context).copyWith(
-          textScaler: const TextScaler.linear(1.0),
+          textScaler: const TextScaler.linear(0.9),
         ),
         child: Theme(
           data: ThemeData(

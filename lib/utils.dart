@@ -5,7 +5,7 @@
 
 import 'package:intl/intl.dart';
 
-String BASE_IP = "http://145.223.73.73:5000/";
+String BASE_IP = "http://82.29.152.181:5000/";
 int BASE_PORT = 5000;
 String BASE_URL = BASE_IP;
 String WHATSAPP_URL = "https://wa.me/51999999999";

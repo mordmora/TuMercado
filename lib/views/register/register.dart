@@ -110,7 +110,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
       Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 10,
-          vertical: 20,
+          vertical: 10,
         ),
         child: Container(
           padding: EdgeInsets.all(width * 0.06),
@@ -446,12 +446,12 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin {
                   TextButton(
                     onPressed: () => Navigator.pushNamedAndRemoveUntil(
                         context, '/login', (route) => false),
-                    child: const Text('Cancelar'),
+                    child: const Text('Aceptar'),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Aceptar'),
+                    child: const Text('Cancelar'),
                   ),
                 ],
               ),

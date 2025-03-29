@@ -120,7 +120,7 @@ class _PersonalFormState extends State<PersonalForm> {
       barrierColor: Colors.white,
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1950),
       lastDate: DateTime(2100),
     );
     if (picked != null) {

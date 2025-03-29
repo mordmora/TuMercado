@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: height * 0.08),
+          SizedBox(height: height * 0.01),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
@@ -117,7 +117,7 @@ class _LoginState extends State<Login> {
                           onChanged: (str) {
                             setState(() {});
                           }),
-                      SizedBox(height: height * 0.03),
+                      SizedBox(height: height * 0.01),
                       const Text("Contraseña", style: TextStyles.subtitle),
                       CustomTextField(
                         isPassword: true,
@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
                           setState(() {});
                         },
                       ),
-                      SizedBox(height: height * 0.02),
+                      SizedBox(height: height * 0.01),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -144,10 +144,10 @@ class _LoginState extends State<Login> {
                                   Navigator.pushNamed(context, "/recovery");
                                 })
                           ]),
-                      SizedBox(height: height * 0.03),
+                      SizedBox(height: height * 0.01),
                       CustomButton(
                           width: width,
-                          height: height * 0.07,
+                          height: height * 0.077,
                           onTap: () {
                             authProvider
                                 .login(_email, _password, deviceID)
@@ -218,7 +218,7 @@ class _LoginState extends State<Login> {
                       SizedBox(height: height * 0.02),
                       CustomButton(
                           width: width,
-                          height: height * 0.07,
+                          height: height * 0.08,
                           onTap: () {
                             Navigator.pushNamed(context, '/register');
                           },
