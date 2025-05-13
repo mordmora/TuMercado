@@ -1,0 +1,11 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.globaltech.tu_mercado",
+        "sha256_cert_fingerprints":
+          ["CC:B0:79:F1:03:8E:89:D7:BA:4A:52:0F:A8:3D:82:5D:2A:48:0F:B0:A2:C2:EF:E2:18:33:3E:8C:C3:90:2D:74"]
+      }
+    }
+  ]

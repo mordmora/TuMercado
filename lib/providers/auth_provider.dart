@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:tu_mercado/models/User.dart';
+import 'package:tu_mercado/models/login_response.dart';
 import 'package:tu_mercado/models/neighborhood.dart';
 import 'package:tu_mercado/utils.dart';
+import 'package:tu_mercado/views/login/login.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool isAuthenticated = false;
@@ -22,31 +25,64 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> login(String email, String password, String deviceID) async {
+  Future<LoginResponse> login(String email, String password, String deviceID) async {
     try {
       Map<String, String> data = {
         "email": email,
         "password": password,
         "token": deviceID
       };
-      String token = "";
-      final Uri url = Uri.parse("$baseUrl" "user/login");
+
+      final Uri url = Uri.parse("$baseUrl/user/login");
+      print("Attempting login to: $url with email: $email"); // Debug
 
       final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
-          body: jsonEncode(data));
+          body: jsonEncode(data)).timeout(const Duration(seconds: 10)); // Added timeout
+
+      print("Login API response status: ${response.statusCode}"); // Debug
+      print("Login API response body: ${response.body}"); // Debug
 
       if (response.statusCode == 200) {
-        notifyListeners();
-        token = jsonDecode(response.body)["token"];
-        return token;
-      } else {
-        String messageBody = jsonDecode(response.body)["message"];
+        final Map<String, dynamic> decodedBody = jsonDecode(response.body);
+        final String? token = decodedBody['token'] as String?;
+        final String? message = decodedBody['message'] as String?;
 
-        return messageBody;
+        if (token != null && token.isNotEmpty) {
+          // Éxito real, token presente
+          return LoginResponse(token: token, message: message, statusCode: 0);
+        } else {
+          // HTTP 200, pero sin token o token vacío, considéralo un error lógico
+          return LoginResponse(
+            token: token, // puede ser null o vacío
+            message: message ?? "Respuesta exitosa pero datos de sesión incompletos.",
+            statusCode: 1,
+          );
+        }
+      } else {
+        String messageBody = "Error desconocido";
+        try {
+          messageBody = jsonDecode(response.body)["message"] ?? "Error del servidor: ${response.statusCode}";
+        } catch (e) {
+          messageBody = "Error al procesar respuesta del servidor: ${response.statusCode}";
+        }
+        return LoginResponse(
+          message: messageBody,
+          statusCode: 1,
+        );
       }
+    } on TimeoutException catch (e) {
+      print("Login API timeout: $e"); // Debug
+      return LoginResponse(
+        message: "Tiempo de espera agotado al conectar con el servidor.",
+        statusCode: 1,
+      );
     } catch (e) {
-      return "Ha ocurrido un error inesperado: $e";
+      print("Login API general error: $e"); // Debug
+      return LoginResponse(
+        message: "No se pudo conectar con el servidor: ${e.toString()}",
+        statusCode: 1,
+      );
     }
   }
 

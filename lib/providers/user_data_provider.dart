@@ -9,15 +9,15 @@ class UserProvider extends ChangeNotifier {
   static final String _baseUrl = BASE_URL;
   bool isLoading = false;
   late UserData _userData;
-
   UserData get userData => _userData;
 
   Future<void> getUserData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
 
     isLoading = true;
-    notifyListeners();
+    String? token;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token');
+
     try {
       final response =
           await http.get(Uri.parse("$_baseUrl/user/getData"), headers: {

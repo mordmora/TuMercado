@@ -41,12 +41,14 @@ dependencies:
   flutter_custom_tabs: ^2.0.0+1
   app_links: ^6.1.1
   intl: ^0.19.0
+  connectivity_plus: ^6.1.4
   #awesome_notifications: ^0.10.0
   socket_io_client: ^3.0.2
   flutter_svg: ^2.0.10+1
   internet_connection_checker_plus: ^2.2.0
   firebase_messaging: ^15.0.2
   firebase_core: ^3.1.1
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:

@@ -38,7 +38,7 @@ class RouteGenerator {
       //  return MaterialPageRoute(builder: (context) => const ChangePassword());
       case '/payment/success':
         return MaterialPageRoute(builder: (context) => const PaymentSucess());
-      case 'payment/failed':
+      case '/payment/failed':
         return MaterialPageRoute(builder: (context) => const PaymentFailure());
       case 'alert':
         return MaterialPageRoute(builder: (context) => const Alert());

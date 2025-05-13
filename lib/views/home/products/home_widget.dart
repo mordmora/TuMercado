@@ -34,11 +34,13 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
     
     fetchProducts = ProductProvider().fetchProducts();
+    print("Getting user data from home screen");
     usrData = Provider.of<UserProvider>(
             // ignore: use_build_context_synchronously
             context,
             listen: false)
         .userData;
+        print(usrData);
         if(usrData == null){
           Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
         }

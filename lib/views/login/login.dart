@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:tu_mercado/components/button.dart';
 import 'package:tu_mercado/components/text_field.dart';
 import 'package:tu_mercado/config/colors.dart';
 import 'package:tu_mercado/config/styles.dart';
+import 'package:tu_mercado/models/User.dart';
 import 'package:tu_mercado/models/user_data.dart';
 import 'package:tu_mercado/providers/auth_provider.dart';
 import 'package:tu_mercado/providers/user_data_provider.dart';
@@ -27,10 +29,8 @@ class _LoginState extends State<Login> {
   //Var Definition
   String _email = "";
   String _password = "";
-  bool rememberMe = true;
+  bool rememberMe = false;
   String deviceID = "";
-  late UserData _userData;
-
   //preferences block
   late SharedPreferences prefs;
 
@@ -148,50 +148,76 @@ class _LoginState extends State<Login> {
                       CustomButton(
                           width: width,
                           height: height * 0.077,
-                          onTap: () {
+                          onTap: () async {
+                            print("Starting login");
+
+                            // Comprobar la conexión a Internet
+                            var connectivityResult =
+                                await Connectivity().checkConnectivity();
+                            if (connectivityResult == ConnectivityResult.none) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.black,
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Text(
+                                    "No hay conexión a Internet",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              return;
+                            }
+
+                            // Si existe conexión, continuar con el login
+                            UserProvider userProvider;
                             authProvider
                                 .login(_email, _password, deviceID)
-                                .then((value) async => {
-                                      if (value.contains("incorrectos") ||
-                                          value ==
-                                              "No se ha podido conectar con el servidor, por favor revisa tu conexión a internet.")
-                                        {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                              value,
-                                              style: TextStyles.normal,
-                                            ),
-                                            backgroundColor: Colors.black,
-                                          ))
-                                        }
-                                      else
-                                        {
-                                          prefs.setString("token", value),
-                                          await Provider.of<UserProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .getUserData(),
-                                          _userData = Provider.of<UserProvider>(
-                                                  // ignore: duplicate_ignore
-                                                  // ignore: use_build_context_synchronously
-                                                  context,
-                                                  listen: false)
-                                              .userData,
-                                          prefs.setBool("membership",
-                                              _userData.membership.active),
-                                          prefs.setBool("first_discount", true),
-                                          prefs.setBool(
-                                              "rememberMe", rememberMe),
-                                          prefs.setString("email", _email),
-                                          prefs.setString(
-                                              "password", _password),
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              "/home",
-                                              (route) => false)
-                                        }
-                                    });
+                                .then((value) async {
+                              print("Login response in UI: token=${value.token}, message=${value.message}, statusCode=${value.statusCode}"); // DEBUG
+                              if (value.token != null && value.token != "" &&
+                                  value.statusCode == 0) {
+                                authProvider.isAuthenticated = true;
+                                authProvider.remembermeValue = rememberMe;
+                                userProvider = Provider.of<UserProvider>(context,
+                                    listen: false);
+                                await prefs.setString("token", value.token!);
+                                // Es buena idea esperar a que getUserData complete si es crucial antes de navegar
+                                await userProvider.getUserData(); 
+                                await prefs.setBool("rememberMe", rememberMe);
+                                await prefs.setString("deviceID", deviceID);
+                                print("Moving to home");
+                                Navigator.pushReplacementNamed(context, "/home"); // Usar pushReplacementNamed para que no pueda volver a login
+                              } else {
+                                print("Login failed in UI: message=${value.message}, statusCode=${value.statusCode}"); // DEBUG
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.black,
+                                    behavior: SnackBarBehavior.floating,
+                                    content: Text(
+                                      value.message ?? "Error al iniciar sesión. Inténtalo de nuevo.", // Manejo de mensaje nulo
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                              }
+                            }).catchError((error, stackTrace) {
+                              print("Error en la cadena de login Future: $error"); // DEBUG
+                              print(stackTrace); // DEBUG
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.red,
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Text(
+                                    "Ocurrió un error inesperado: ${error.toString()}",
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            });
                           },
                           color: Colors.black,
                           labelColor: Colors.white,

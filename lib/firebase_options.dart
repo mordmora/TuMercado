@@ -41,48 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAO_aPJBuJ0LB71X4S61RUcSx2Fygj9S7s',
-    appId: '1:340657532958:web:fc554a9dd81f6fe5e1be0f',
-    messagingSenderId: '340657532958',
-    projectId: 'tumercado-ecc4c',
-    authDomain: 'tumercado-ecc4c.firebaseapp.com',
-    storageBucket: 'tumercado-ecc4c.appspot.com',
-    measurementId: 'G-W5SNLHPQYQ',
+    apiKey: 'AIzaSyDKMRgQD32SC5AbteqcxwXn9R-x14FvgXM',
+    appId: '1:296766935842:web:2095ccca7b13bc97688b7b',
+    messagingSenderId: '296766935842',
+    projectId: 'tumercado-62ccd',
+    authDomain: 'tumercado-62ccd.firebaseapp.com',
+    storageBucket: 'tumercado-62ccd.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBOrsg8lkrnkjboyifWZ3t9h2ecLt9N1cE',
-    appId: '1:340657532958:android:e8a2cb8f2af96515e1be0f',
-    messagingSenderId: '340657532958',
-    projectId: 'tumercado-ecc4c',
-    storageBucket: 'tumercado-ecc4c.appspot.com',
+    apiKey: 'AIzaSyDIecAQX0A5tSCwOVZ0fZZiailevqtM0rY',
+    appId: '1:296766935842:android:c5a9d17be8c04aa8688b7b',
+    messagingSenderId: '296766935842',
+    projectId: 'tumercado-62ccd',
+    storageBucket: 'tumercado-62ccd.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDfPvwG2MjK4gJvUGsIjbAg6lD5MH8NyLA',
-    appId: '1:340657532958:ios:59c8512b5752788fe1be0f',
-    messagingSenderId: '340657532958',
-    projectId: 'tumercado-ecc4c',
-    storageBucket: 'tumercado-ecc4c.appspot.com',
+    apiKey: 'AIzaSyCs5KkTNH_1KQyjeF2ZwPYsWTbCo9dxsaY',
+    appId: '1:296766935842:ios:8f8dc5aee855f5e3688b7b',
+    messagingSenderId: '296766935842',
+    projectId: 'tumercado-62ccd',
+    storageBucket: 'tumercado-62ccd.firebasestorage.app',
     iosBundleId: 'com.example.tuMercado',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDfPvwG2MjK4gJvUGsIjbAg6lD5MH8NyLA',
-    appId: '1:340657532958:ios:59c8512b5752788fe1be0f',
-    messagingSenderId: '340657532958',
-    projectId: 'tumercado-ecc4c',
-    storageBucket: 'tumercado-ecc4c.appspot.com',
+    apiKey: 'AIzaSyCs5KkTNH_1KQyjeF2ZwPYsWTbCo9dxsaY',
+    appId: '1:296766935842:ios:8f8dc5aee855f5e3688b7b',
+    messagingSenderId: '296766935842',
+    projectId: 'tumercado-62ccd',
+    storageBucket: 'tumercado-62ccd.firebasestorage.app',
     iosBundleId: 'com.example.tuMercado',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAO_aPJBuJ0LB71X4S61RUcSx2Fygj9S7s',
-    appId: '1:340657532958:web:41dd5f429d4e424be1be0f',
-    messagingSenderId: '340657532958',
-    projectId: 'tumercado-ecc4c',
-    authDomain: 'tumercado-ecc4c.firebaseapp.com',
-    storageBucket: 'tumercado-ecc4c.appspot.com',
-    measurementId: 'G-241QPFX9BF',
+    apiKey: 'AIzaSyDKMRgQD32SC5AbteqcxwXn9R-x14FvgXM',
+    appId: '1:296766935842:web:7c68bdf637bb7b9d688b7b',
+    messagingSenderId: '296766935842',
+    projectId: 'tumercado-62ccd',
+    authDomain: 'tumercado-62ccd.firebaseapp.com',
+    storageBucket: 'tumercado-62ccd.firebasestorage.app',
   );
 }

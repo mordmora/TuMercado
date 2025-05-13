@@ -17,20 +17,27 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp(
-  //  options: DefaultFirebaseOptions.android,
-  //  name: 'tumercado-ecc4c',
-  //);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.android,
+    name: 'tumercado-ecc4c',
+  );
   SharedPreferences prefs = await SharedPreferences.getInstance();
- // FirebaseMessaging messaging = FirebaseMessaging.instance;
- // await messaging.requestPermission();
- // await messaging.getToken().then((value) {
-    prefs.setString("deviceID", "random_test_token");
- // });
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission();
+  await messaging.getToken().then((value) {
+    print("Firebase Token: $value");
+    prefs.setString("deviceID", value!);
+  });
 
-  //FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
 
- // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+
+  });
 
   runApp(const MyApp());
 }
